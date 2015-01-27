@@ -8,16 +8,8 @@
 class BmiHeat {
   public:
     BmiHeat() {
-      const char *input_var_names[] = {
-        "plate_surface__temperature",
-        NULL
-      };
-      const char *output_var_names[] = {
-        "plate_surface__temperature",
-        NULL
-      };
-      input_var_name_count = 1;
-      output_var_name_count = 1;
+      this->input_var_names[0] = "plate_surface__temperature";
+      this->output_var_names[0] = "plate_surface__temperature";
     };
 
     void Initialize (std::string config_file);
@@ -63,11 +55,11 @@ class BmiHeat {
 
   private:
     heat::Heat _model;
-    int input_var_name_count;
-    int output_var_name_count;
+    static const int input_var_name_count = 1;
+    static const int output_var_name_count = 1;
 
-    char** input_var_names;
-    char** output_var_names;
+    const char* input_var_names[2];
+    const char* output_var_names[2];
 };
 
 #endif
