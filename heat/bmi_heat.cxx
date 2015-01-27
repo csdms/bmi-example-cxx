@@ -272,7 +272,7 @@ void BmiHeat::
 GetInputVarNames (char **names)
 {
   for (int i=0; i<this->input_var_name_count; i++) {
-    strncpy(names[i], (const char *)this->input_var_names, 2048);
+    strncpy(names[i], (const char *)this->input_var_names[i], 2048);
   }
 }
 
@@ -281,7 +281,7 @@ void BmiHeat::
 GetOutputVarNames (char **names)
 {
   for (int i=0; i<this->input_var_name_count; i++) {
-    strncpy(names[i], (const char *)this->input_var_names, 2048);
+    strncpy(names[i], (const char *)this->output_var_names[i], 2048);
   }
 }
 
