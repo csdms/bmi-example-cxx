@@ -1,4 +1,4 @@
-#include <bmi.hxx>
+#include <heat/bmi_heat.hxx>
 
 #include <iostream>
 #include <stdio.h>
@@ -7,30 +7,40 @@
 int
 main (void)
 {
-  BMI::Model model;
+  BmiHeat model;
+  char name[2048];
 
   fprintf (stdout, "Initializing... ");
-  model.initialize ("");
+  model.Initialize ("");
   fprintf (stdout, "Done\n");
 
-  std::cout << model.get_component_name () << std::endl;
+  model.GetComponentName(name);
+  std::cout << name << std::endl;
 
   {
     const int n_steps = 10;
+    double now;
+    double then;
 
     fprintf (stdout, "Running...\n");
-    for (int i = 0; i < n_steps; i++)
-    {
-      model.update ();
-      fprintf (stdout, "Time: %f\n", model.get_current_time ());
+    for (int i = 0; i < n_steps; i++) {
+      fprintf(stderr, "Updating\n"); fflush(stderr);
+      model.Update();
+      fprintf(stderr, "Updated\n"); fflush(stderr);
+      model.GetCurrentTime(&now);
+
+      fprintf (stdout, "Time: %f\n", now);
     }
-    model.update_until (model.get_end_time ());
-    fprintf (stdout, "Time: %f\n", model.get_current_time ());
+    model.GetEndTime(&then);
+    model.UpdateUntil(then);
+    model.GetCurrentTime(&now);
+
+    fprintf (stdout, "Time: %f\n", now);
     fprintf (stdout, "Done\n");
   }
 
   fprintf (stdout, "Finalizing... ");
-  model.finalize ();
+  model.Finalize ();
   fprintf (stdout, "Done\n");
 
   return EXIT_SUCCESS;
