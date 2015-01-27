@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 2.6)
 
-project (bmi)
+project (heat)
 
-add_subdirectory (bmi)
-add_subdirectory (testing)
+add_subdirectory (heat)
+#add_subdirectory (testing)
 
 include (CTest)
 
