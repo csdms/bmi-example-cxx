@@ -9,14 +9,15 @@
 void BmiHeat::
 Initialize (std::string config_file)
 {
-  this->_model = heat::Heat(config_file);
+  if (config_file.compare("") != 0 )
+    this->_model = heat::Heat(config_file);
 }
 
 
 void BmiHeat::
 Update()
 {
-  this->_model.advance_in_time();
+  this->UpdateFrac(1.);
 }
 
 
@@ -47,7 +48,7 @@ UpdateFrac(double time_frac)
 
   this->GetTimeStep(&dt);
   this->_model.dt = time_frac * dt;
-  this->Update();
+  this->_model.advance_in_time();
   this->_model.dt = dt;
 }
 
