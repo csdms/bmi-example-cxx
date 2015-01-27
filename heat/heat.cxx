@@ -20,10 +20,11 @@ heat_solve_2d (double ** z, int shape[2], double spacing[2], double alpha,
     const double c = alpha * dt / (dx2 + dy2);
 
     for (i=1; i<top_row; i++)
-      for (j=1; j<top_col; j++)
+      for (j=1; j<top_col; j++) {
         out[i][j] = c * (dx2 * (z[i][j - 1] + z[i][j + 1]) +
                          dy2 * (z[i - 1][j] + z[i + 1][j]) -
                          2. * (dx2 + dy2) * z[i][j]);
+      }
 
     for (j=0; j<shape[1]; j++) {
         out[0][j] = 0.;
@@ -135,10 +136,5 @@ Heat()
 heat::Heat::
 ~Heat()
 {
-  delete this->temp_z[0];
-  delete this->temp_z;
-  delete this->z[0];
-  delete this->z;
-
   this->time = 0.;
 }
