@@ -1,48 +1,60 @@
-#include <bmi.hxx>
+#include <heat/bmi_heat.hxx>
 
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 
-void print_var_names (BMI::Model model);
+void print_var_names (BmiHeat model);
 
 int
 main (void)
 {
   int i;
   const int n_steps = 10;
-  BMI::Model model;
+  BmiHeat model;
+  char name[2048];
 
-  model.initialize ("");
+  model.Initialize("");
 
-  std::cout << model.get_component_name () << std::endl;
+  model.GetComponentName(name);
+  std::cout << name << std::endl;
 
   print_var_names (model);
 
-  model.finalize ();
+  model.Finalize();
 
   return EXIT_SUCCESS;
 }
 
 void
-print_var_names (BMI::Model model)
+print_var_names (BmiHeat model)
 {
-  char **var_names = NULL;
-  char **name;
+  char **names;
+  int number_of_names;
 
-  var_names = (char**)model.get_input_var_names ();
-  fprintf (stdout, "Input var names\n");
-  fprintf (stdout, "===============\n");
-  for (name = var_names; *name; name++)
-    fprintf (stdout, "%s\n", *name);
+  model.GetInputVarNameCount(&number_of_names);
+  fprintf (stdout, "Number of input names: %d\n", number_of_names);
+
+  names = new char*[number_of_names];
+  for (int i=0; i<number_of_names; i++) {
+    names[i] = new char[2048];
+  }
+
+  model.GetInputVarNames(names);
+  for (int i=0; i<number_of_names; i++)
+    fprintf (stdout, "%s\n", names[i]);
   fprintf (stdout, "\n");
 
-  var_names = (char**)model.get_output_var_names ();
-  fprintf (stdout, "Output var names\n");
-  fprintf (stdout, "================\n");
-  for (name = var_names; *name; name++)
-    fprintf (stdout, "%s\n", *name);
-  fprintf (stdout, "\n");
+  model.GetOutputVarNameCount(&number_of_names);
+  fprintf (stdout, "Number of output names: %d\n", number_of_names);
 
-  return;
+  names = new char*[number_of_names];
+  for (int i=0; i<number_of_names; i++) {
+    names[i] = new char[2048];
+  }
+
+  model.GetOutputVarNames(names);
+  for (int i=0; i<number_of_names; i++)
+    fprintf (stdout, "%s\n", names[i]);
+  fprintf (stdout, "\n");
 }
