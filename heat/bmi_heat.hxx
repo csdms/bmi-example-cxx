@@ -2,7 +2,7 @@
 #define BMI_HEAT_H_INCLUDED
 
 #include <string>
-#include <heat.hxx>
+#include <heat/heat.hxx>
 
 
 class BmiHeat {
