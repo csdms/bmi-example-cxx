@@ -1,60 +1,82 @@
-#include <bmi.hxx>
+#include <heat/bmi_heat.hxx>
 
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 
-void print_var_info (BMI::Model model, const char *var);
+void print_var_info (BmiHeat model, char *var);
 
 int
 main (void)
 {
-  BMI::Model model;
+  BmiHeat model;
+  char name[2048];
 
-  model.initialize ("");
+  model.Initialize("");
 
-  std::cout << model.get_component_name () << std::endl;
+  model.GetComponentName(name);
+  std::cout << name << std::endl;
 
   {
-    const char **vars = NULL;
-    char **var = NULL;
+    int number_of_names;
+    char **names;
 
-    vars = model.get_input_var_names ();
-    for (var = (char **)vars; *var; var++)
-      print_var_info (model, *var);
+    model.GetInputVarNameCount(&number_of_names);
+    names = new char*[number_of_names];
+    for (int i=0; i<number_of_names; i++) {
+      names[i] = new char[2048];
+    }
 
-    vars = model.get_output_var_names ();
-    for (var = (char **)vars; *var; var++)
-      print_var_info (model, *var);
+    model.GetInputVarNames(names);
+    for (int i=0; i<number_of_names; i++)
+      print_var_info(model, names[i]);
+
+    model.GetOutputVarNameCount(&number_of_names);
+    names = new char*[number_of_names];
+    for (int i=0; i<number_of_names; i++) {
+      names[i] = new char[2048];
+    }
+
+    model.GetOutputVarNames(names);
+    for (int i=0; i<number_of_names; i++)
+      print_var_info(model, names[i]);
 
   }
 
-  model.finalize ();
+  model.Finalize();
 
   return EXIT_SUCCESS;
 }
 
 void
-print_var_info (BMI::Model model, const char *var)
+print_var_info(BmiHeat model, char *var)
 {
-  std::string type = model.get_var_type (std::string (var));
-  std::string units = model.get_var_units (std::string (var));
-  int n_dims = model.get_var_rank (std::string (var));
-  int *shape = new int[n_dims];
-  double *spacing = new double[n_dims];
-  double *origin = new double[n_dims];
+  int *shape;
+  double *spacing;
+  double *origin;
+  char type[2048];
+  char units[2048];
+  int rank;
 
-  model.get_grid_shape (var, shape);
-  model.get_grid_spacing (var, spacing);
-  model.get_grid_origin (var, origin);
+  model.GetVarType(var, type);
+  model.GetVarUnits(var, units);
+  model.GetVarRank(var, &rank);
+
+  shape = new int[rank];
+  spacing = new double[rank];
+  origin = new double[rank];
+
+  model.GetGridShape(var, shape);
+  model.GetGridSpacing(var, spacing);
+  model.GetGridOrigin(var, origin);
 
   fprintf (stdout, "\n");
   fprintf (stdout, "Variable info\n");
   fprintf (stdout, "=============\n");
   fprintf (stdout, "Name: %s\n", var);
-  fprintf (stdout, "Type: %s\n", type.c_str ());
-  fprintf (stdout, "Units: %s\n", units.c_str ());
-  fprintf (stdout, "Rank: %d\n", n_dims);
+  fprintf (stdout, "Type: %s\n", type);
+  fprintf (stdout, "Units: %s\n", units);
+  fprintf (stdout, "Rank: %d\n", rank);
   fprintf (stdout, "Dimension: %d x %d\n", shape[0], shape[1]);
   fprintf (stdout, "Resolution: %f x %f\n", spacing[0], spacing[1]);
   fprintf (stdout, "Corner: %f x %f\n", origin[0], origin[1]);
