@@ -19,5 +19,6 @@ add_library(bmicxx_heat ${bmi_heat_lib_SRCS} )
 ########### Install files ###############
 
 install(FILES bmi_heat.hxx DESTINATION include/heat COMPONENT heat)
+install(FILES heat.hxx DESTINATION include/heat COMPONENT heat)
 install(FILES heatcxx.pc DESTINATION lib/pkgconfig)
 install(TARGETS bmicxx_heat DESTINATION lib COMPONENT heat)
