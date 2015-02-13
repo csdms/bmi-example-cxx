@@ -13,7 +13,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 set(bmi_heat_lib_SRCS bmi_heat.cxx heat.cxx)
-add_library(bmicxx_heat ${bmi_heat_lib_SRCS} )
+add_library(bmi_heatcxx ${bmi_heat_lib_SRCS} )
 
 
 ########### Install files ###############
@@ -21,4 +21,4 @@ add_library(bmicxx_heat ${bmi_heat_lib_SRCS} )
 install(FILES bmi_heat.hxx DESTINATION include/heat COMPONENT heat)
 install(FILES heat.hxx DESTINATION include/heat COMPONENT heat)
 install(FILES heatcxx.pc DESTINATION lib/pkgconfig)
-install(TARGETS bmicxx_heat DESTINATION lib COMPONENT heat)
+install(TARGETS bmi_heatcxx DESTINATION lib COMPONENT heat)
