@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include <string>
+#include <cstring>
 #include <cstdlib>
 #include <bmi_heat.hxx>
 #include <heat.hxx>
