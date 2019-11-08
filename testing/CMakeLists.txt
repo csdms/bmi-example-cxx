@@ -1,6 +1,5 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.0)
 
-project (bmi)
 include (CTest)
 
 add_test (BMI_IRF test_irf)
@@ -11,7 +10,7 @@ add_test (BMI_GRID_INFO test_grid_info)
 
 set (BUILD_SHARED_LIBS ON)
 
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/.. )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../heat )
 
 ########### BMI main program ###############
 
@@ -27,8 +26,8 @@ add_executable(test_get_value ${bmi_get_value_SRCS})
 add_executable(test_set_value ${bmi_set_value_SRCS})
 add_executable(test_grid_info ${bmi_grid_info_SRCS})
 
-target_link_libraries(test_irf bmi_heatcxx)
-target_link_libraries(test_print_var_names bmi_heatcxx)
-target_link_libraries(test_get_value bmi_heatcxx)
-target_link_libraries(test_set_value bmi_heatcxx)
-target_link_libraries(test_grid_info bmi_heatcxx)
+target_link_libraries(test_irf bmiheatcxx)
+target_link_libraries(test_print_var_names bmiheatcxx)
+target_link_libraries(test_get_value bmiheatcxx)
+target_link_libraries(test_set_value bmiheatcxx)
+target_link_libraries(test_grid_info bmiheatcxx)
