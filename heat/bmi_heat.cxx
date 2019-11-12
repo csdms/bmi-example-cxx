@@ -34,25 +34,17 @@ UpdateUntil(double t)
 
   {
     const int n_steps = (t - time) / dt;
+    double frac;
 
     for (int n=0; n<n_steps; n++)
       this->Update();
 
-    // this->UpdateFrac(n_steps - int(n_steps));
+    frac = n_steps - int(n_steps);
+    this->_model.dt = frac * dt;
+    this->_model.advance_in_time();
+    this->_model.dt = dt;
   }
 }
-
-
-// void BmiHeat::
-// UpdateFrac(double time_frac)
-// {
-//   double dt = 0.;
-
-//   this->GetTimeStep(&dt);
-//   this->_model.dt = time_frac * dt;
-//   this->_model.advance_in_time();
-//   this->_model.dt = dt;
-// }
 
 
 void BmiHeat::
