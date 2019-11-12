@@ -43,7 +43,7 @@ class BmiHeat : public bmi::Bmi {
     void GetValueAtIndices(const char *name, void *dest, int *inds, int count);
 
     void SetValue(const char *name, void *src);
-    void SetValueAtIndices(const char *name, int *inds, int len, char *src);
+    void SetValueAtIndices(const char *name, int *inds, int len, void *src);
 
     int GetGridRank(const int grid);
     int GetGridSize(const int grid);
