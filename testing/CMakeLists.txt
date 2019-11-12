@@ -13,3 +13,9 @@ make_test(test_print_var_names)
 make_test(test_get_value)
 make_test(test_set_value)
 make_test(test_grid_info)
+make_test(test_initialize_from_file)
+
+file(
+  COPY ${CMAKE_CURRENT_SOURCE_DIR}/config.txt
+  DESTINATION ${CMAKE_BINARY_DIR}/testing
+)
