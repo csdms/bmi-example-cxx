@@ -3,8 +3,9 @@
 #include <string>
 #include <cstring>
 #include <cstdlib>
-#include <bmi_heat.hxx>
-#include <heat.hxx>
+
+#include "bmi_heat.hxx"
+#include "heat.hxx"
 
 
 void BmiHeat::
@@ -18,7 +19,7 @@ Initialize (std::string config_file)
 void BmiHeat::
 Update()
 {
-  this->UpdateFrac(1.);
+  this->_model.advance_in_time();
 }
 
 
@@ -28,8 +29,8 @@ UpdateUntil(double t)
   double time;
   double dt;
 
-  this->GetCurrentTime(&time);
-  this->GetTimeStep(&dt);
+  time = this->GetCurrentTime();
+  dt = this->GetTimeStep();
 
   {
     const int n_steps = (t - time) / dt;
@@ -37,27 +38,37 @@ UpdateUntil(double t)
     for (int n=0; n<n_steps; n++)
       this->Update();
 
-    this->UpdateFrac(n_steps - int(n_steps));
+    // this->UpdateFrac(n_steps - int(n_steps));
   }
 }
 
 
-void BmiHeat::
-UpdateFrac(double time_frac)
-{
-  double dt = 0.;
+// void BmiHeat::
+// UpdateFrac(double time_frac)
+// {
+//   double dt = 0.;
 
-  this->GetTimeStep(&dt);
-  this->_model.dt = time_frac * dt;
-  this->_model.advance_in_time();
-  this->_model.dt = dt;
-}
+//   this->GetTimeStep(&dt);
+//   this->_model.dt = time_frac * dt;
+//   this->_model.advance_in_time();
+//   this->_model.dt = dt;
+// }
 
 
 void BmiHeat::
 Finalize()
 {
   this->_model.~Heat();
+}
+
+
+int BmiHeat::
+GetVarGrid(const char * name)
+{
+  if (strcmp(name, "plate_surface__temperature") == 0)
+    return 0;
+  else
+    return -1;
 }
 
 
@@ -71,13 +82,13 @@ GetVarType(const char * name, char * type)
 }
 
 
-void BmiHeat::
-GetVarItemsize(const char *name, int * itemsize)
+int BmiHeat::
+GetVarItemsize(const char *name)
 {
   if (strcmp(name, "plate_surface__temperature") == 0)
-    *itemsize = sizeof(double);
+    return sizeof(double);
   else
-    *itemsize = 0;
+    return 0;
 }
 
 
@@ -85,47 +96,39 @@ void BmiHeat::
 GetVarUnits(const char * name, char * units)
 {
   if (strcmp(name, "plate_surface__temperature") == 0)
-    strncpy(units, "meter", 2048);
+    strncpy(units, "meters", 2048);
   else
     strncpy(units, "", 2048);
 }
 
 
-void BmiHeat::
-GetVarRank(const char *name, int * rank)
-{
-  if (strcmp(name, "plate_surface__temperature") == 0)
-    *rank = 2;
-  else
-    *rank = -1;
-}
-
-
-void BmiHeat::
-GetVarSize(const char * name, int* size)
-{
-  int shape[2];
-  this->GetGridShape(name, shape);
-  *size = shape[0] * shape[1];
-}
-
-
-void BmiHeat::
-GetVarNbytes(const char * name, int* nbytes)
+int BmiHeat::
+GetVarNbytes(const char * name)
 {
   int itemsize;
-  int size;
+  int gridsize;
 
-  this->GetVarItemsize(name, &itemsize);
-  this->GetVarSize(name, &size);
-  *nbytes = itemsize * size;
+  itemsize = this->GetVarItemsize(name);
+  gridsize = this->GetGridSize(this->GetVarGrid(name));
+  
+  return itemsize * gridsize;
 }
 
 
 void BmiHeat::
-GetGridShape(const char * name, int *shape)
+GetVarLocation(const char *name, char *location)
 {
-  if (strcmp(name, "plate_surface__temperature") == 0) {
+  if (strcmp(name, "plate_surface__temperature") == 0)
+    strncpy(location, "node", bmi::MAX_UNITS_NAME);
+  else
+    strncpy(location, "", bmi::MAX_UNITS_NAME);
+}
+
+
+void BmiHeat::
+GetGridShape(const int grid, int *shape)
+{
+  if (grid == 0) {
     shape[0] = this->_model.shape[0];
     shape[1] = this->_model.shape[1];
   }
@@ -133,31 +136,54 @@ GetGridShape(const char * name, int *shape)
 
 
 void BmiHeat::
-GetGridSpacing (const char *name, double * spacing)
+GetGridSpacing (const int grid, double * spacing)
 {
-  if (strcmp(name, "plate_surface__temperature") == 0) {
+  if (grid == 0) {
     spacing[0] = this->_model.spacing[0];
     spacing[1] = this->_model.spacing[1];
   }
-
-  return;
 }
 
 
 void BmiHeat::
-GetGridOrigin (const char * name, double *origin)
+GetGridOrigin (const int grid, double *origin)
 {
-  if (strcmp(name, "plate_surface__temperature") == 0) {
+  if (grid == 0) {
     origin[0] = this->_model.origin[0];
     origin[1] = this->_model.origin[1];
   }
 }
 
 
-void BmiHeat::
-GetGridType (const char * name, char * type)
+int BmiHeat::
+GetGridRank(const int grid)
 {
-  if (strcmp(name, "plate_surface__temperature") == 0)
+  if (grid == 0)
+    return 2;
+  else
+    return -1;
+}
+
+
+int BmiHeat::
+GetGridSize(const int grid)
+{
+  int shape[2];
+
+  if (grid == 0) {
+    this->GetGridShape(grid, shape);
+    return shape[0] * shape[1];
+  }
+  else
+    return -1;
+
+}
+
+
+void BmiHeat::
+GetGridType (const int grid, char * type)
+{
+  if (grid == 0)
     strncpy(type, "uniform_rectilinear", 2048);
   else
     strncpy(type, "", 2048);
@@ -165,34 +191,104 @@ GetGridType (const char * name, char * type)
 
 
 void BmiHeat::
-GetValue (const char * name, char *dest)
+GetGridX(const int grid, double *x)
 {
-  char * src = NULL;
+  throw "Not implemented";
+}
+
+
+void BmiHeat::
+GetGridY(const int grid, double *y)
+{
+  throw "Not implemented";
+}
+
+
+void BmiHeat::
+GetGridZ(const int grid, double *z)
+{
+  throw "Not implemented";
+}
+
+
+int BmiHeat::
+GetGridNodeCount(const int grid)
+{
+  throw "Not implemented";
+}
+
+
+int BmiHeat::
+GetGridEdgeCount(const int grid)
+{
+  throw "Not implemented";
+}
+
+
+int BmiHeat::
+GetGridFaceCount(const int grid)
+{
+  throw "Not implemented";
+}
+
+
+void BmiHeat::
+GetGridEdgeNodes(const int grid, int *edge_nodes)
+{
+  throw "Not implemented";
+}
+
+
+void BmiHeat::
+GetGridFaceEdges(const int grid, int *face_edges)
+{
+  throw "Not implemented";
+}
+
+
+void BmiHeat::
+GetGridFaceNodes(const int grid, int *face_nodes)
+{
+  throw "Not implemented";
+}
+
+
+void BmiHeat::
+GetGridNodesPerFace(const int grid, int *nodes_per_face)
+{
+  throw "Not implemented";
+}
+
+
+void BmiHeat::
+GetValue (const char * name, void *dest)
+{
+  void * src = NULL;
   int nbytes = 0;
 
-  this->GetValuePtr(name, &src);
-  this->GetVarNbytes(name, &nbytes);
-  
+  src = this->GetValuePtr(name);
+  nbytes = this->GetVarNbytes(name);
+
   memcpy (dest, src, nbytes);
 }
 
 
-void BmiHeat::
-GetValuePtr (const char * name, char **dest)
+void *BmiHeat::
+GetValuePtr (const char * name)
 {
   if (strcmp(name, "plate_surface__temperature") == 0)
-    *dest = (char*)this->_model.z[0];
+    return (void*)this->_model.z[0];
   else
-    *dest = NULL;
+    return NULL;
 }
 
 
 void BmiHeat::
-GetValueAtIndices (const char *name, char *dest, int * inds, int len)
+GetValueAtIndices (const char *name, void *dest, int *inds, int len)
 {
-  char * src = NULL;
+  void * src = NULL;
 
-  this->GetValuePtr(name, &src);
+  src = this->GetValuePtr(name);
 
   if (src) {
     int i;
@@ -200,37 +296,37 @@ GetValueAtIndices (const char *name, char *dest, int * inds, int len)
     int offset;
     char *ptr;
 
-    this->GetVarItemsize(name, &itemsize);
+    itemsize = this->GetVarItemsize(name);
 
-    for (i=0, ptr=dest; i<len; i++, ptr+=itemsize) {
+    for (i=0, ptr=(char *)dest; i<len; i++, ptr+=itemsize) {
       offset = inds[i] * itemsize;
-      memcpy(ptr, src + offset, itemsize);
+      memcpy(ptr, (char *)src + offset, itemsize);
     }
   }
 }
 
 
 void BmiHeat::
-SetValue (const char * name, char *src)
+SetValue (const char * name, void *src)
 {
-  char * dest = NULL;
+  void * dest = NULL;
 
-  this->GetValuePtr(name, &dest);
+  dest = this->GetValuePtr(name);
 
   if (dest) {
     int nbytes = 0;
-    this->GetVarNbytes(name, &nbytes);
+    nbytes = this->GetVarNbytes(name);
     memcpy(dest, src, nbytes);
   }
 }
 
 
 void BmiHeat::
-SetValueAtIndices (const char * name, int * inds, int len, char *src)
+SetValueAtIndices (const char * name, int * inds, int len, void *src)
 {
-  char * dest = NULL;
+  void * dest = NULL;
 
-  this->GetValuePtr(name, &dest);
+  dest = this->GetValuePtr(name);
 
   if (dest) {
     int i;
@@ -238,11 +334,11 @@ SetValueAtIndices (const char * name, int * inds, int len, char *src)
     int offset;
     char *ptr;
 
-    this->GetVarItemsize(name, &itemsize);
+    itemsize = this->GetVarItemsize(name);
 
-    for (i=0, ptr=src; i<len; i++, ptr+=itemsize) {
+    for (i=0, ptr=(char *)src; i<len; i++, ptr+=itemsize) {
       offset = inds[i] * itemsize;
-      memcpy(dest + offset, ptr, itemsize);
+      memcpy((char *)dest + offset, ptr, itemsize);
     }
   }
 }
@@ -255,17 +351,17 @@ GetComponentName (char * name)
 }
 
 
-void BmiHeat::
-GetInputVarNameCount(int * count)
+int BmiHeat::
+GetInputItemCount()
 {
-  *count = this->input_var_name_count;
+  return this->input_var_name_count;
 }
 
 
-void BmiHeat::
-GetOutputVarNameCount(int * count)
+int BmiHeat::
+GetOutputItemCount()
 {
-  *count = this->output_var_name_count;
+  return this->output_var_name_count;
 }
 
 
@@ -287,21 +383,21 @@ GetOutputVarNames (char **names)
 }
 
 
-void BmiHeat::
-GetStartTime (double * start) {
-  *start = 0.;
+double BmiHeat::
+GetStartTime () {
+  return 0.;
 }
 
 
-void BmiHeat::
-GetEndTime (double *end) {
-  *end = this->_model.t_end;
+double BmiHeat::
+GetEndTime () {
+  return this->_model.t_end;
 }
 
 
-void BmiHeat::
-GetCurrentTime (double * time) {
-  *time = this->_model.time;
+double BmiHeat::
+GetCurrentTime () {
+  return this->_model.time;
 }
 
 
@@ -311,7 +407,7 @@ GetTimeUnits (char * units) {
 }
 
 
-void BmiHeat::
-GetTimeStep (double * dt) {
-  *dt = this->_model.dt;
+double BmiHeat::
+GetTimeStep () {
+  return this->_model.dt;
 }
