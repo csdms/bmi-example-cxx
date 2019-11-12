@@ -68,9 +68,9 @@ void BmiHeat::
 GetVarType(const char * name, char * type)
 {
   if (strcmp(name, "plate_surface__temperature") == 0)
-    strncpy(type, "double", 2048);
+    strncpy(type, "double", bmi::MAX_TYPE_NAME);
   else
-    strncpy(type, "", 2048);
+    strncpy(type, "", bmi::MAX_TYPE_NAME);
 }
 
 
@@ -88,9 +88,9 @@ void BmiHeat::
 GetVarUnits(const char * name, char * units)
 {
   if (strcmp(name, "plate_surface__temperature") == 0)
-    strncpy(units, "meters", 2048);
+    strncpy(units, "meters", bmi::MAX_UNITS_NAME);
   else
-    strncpy(units, "", 2048);
+    strncpy(units, "", bmi::MAX_UNITS_NAME);
 }
 
 
@@ -176,9 +176,9 @@ void BmiHeat::
 GetGridType (const int grid, char * type)
 {
   if (grid == 0)
-    strncpy(type, "uniform_rectilinear", 2048);
+    strncpy(type, "uniform_rectilinear", bmi::MAX_VAR_NAME);
   else
-    strncpy(type, "", 2048);
+    strncpy(type, "", bmi::MAX_VAR_NAME);
 }
 
 
@@ -339,7 +339,7 @@ SetValueAtIndices (const char * name, int * inds, int len, void *src)
 void BmiHeat::
 GetComponentName (char * name)
 {
-  strncpy(name, "The 2D Heat Equation", 2048);
+  strncpy(name, "The 2D Heat Equation", bmi::MAX_COMPONENT_NAME);
 }
 
 
@@ -361,7 +361,7 @@ void BmiHeat::
 GetInputVarNames (char **names)
 {
   for (int i=0; i<this->input_var_name_count; i++) {
-    strncpy(names[i], (const char *)this->input_var_names[i], 2048);
+    strncpy(names[i], (const char *)this->input_var_names[i], bmi::MAX_VAR_NAME);
   }
 }
 
@@ -370,7 +370,7 @@ void BmiHeat::
 GetOutputVarNames (char **names)
 {
   for (int i=0; i<this->input_var_name_count; i++) {
-    strncpy(names[i], (const char *)this->output_var_names[i], 2048);
+    strncpy(names[i], (const char *)this->output_var_names[i], bmi::MAX_VAR_NAME);
   }
 }
 
@@ -395,7 +395,7 @@ GetCurrentTime () {
 
 void BmiHeat::
 GetTimeUnits (char * units) {
-  strncpy(units, "d", 2048);
+  strncpy(units, "d", bmi::MAX_UNITS_NAME);
 }
 
 

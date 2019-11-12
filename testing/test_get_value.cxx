@@ -15,7 +15,7 @@ main (void)
   const int n_steps = 10;
   BmiHeat model;
   int size;
-  char name[2048];
+  char name[bmi::MAX_COMPONENT_NAME];
   int rank;
 
   model.Initialize("");

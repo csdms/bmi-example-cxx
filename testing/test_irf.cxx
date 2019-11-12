@@ -8,7 +8,7 @@ int
 main (void)
 {
   BmiHeat model;
-  char name[2048];
+  char name[bmi::MAX_COMPONENT_NAME];
 
   fprintf (stdout, "Initializing... ");
   model.Initialize ("");

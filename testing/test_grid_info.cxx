@@ -11,7 +11,7 @@ int
 main (void)
 {
   BmiHeat model;
-  char name[2048];
+  char name[bmi::MAX_COMPONENT_NAME];
 
   model.Initialize("");
 
@@ -25,7 +25,7 @@ main (void)
     number_of_names = model.GetInputItemCount();
     names = new char*[number_of_names];
     for (int i=0; i<number_of_names; i++) {
-      names[i] = new char[2048];
+      names[i] = new char[bmi::MAX_VAR_NAME];
     }
 
     model.GetInputVarNames(names);
@@ -35,7 +35,7 @@ main (void)
     number_of_names = model.GetOutputItemCount();
     names = new char*[number_of_names];
     for (int i=0; i<number_of_names; i++) {
-      names[i] = new char[2048];
+      names[i] = new char[bmi::MAX_VAR_NAME];
     }
 
     model.GetOutputVarNames(names);
@@ -56,12 +56,12 @@ print_var_info(BmiHeat model, char *var)
   double *spacing;
   double *origin;
   int grid;
-  char type[2048];
-  char units[2048];
+  char type[bmi::MAX_TYPE_NAME];
+  char units[bmi::MAX_UNITS_NAME];
   int rank;
   int size;
   int nbytes;
-  char grid_type[2048];
+  char grid_type[bmi::MAX_TYPE_NAME];
 
   model.GetVarType(var, type);
   model.GetVarUnits(var, units);

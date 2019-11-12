@@ -15,7 +15,7 @@ main (void)
   double *new_vals = NULL;
   int *shape = NULL;
   int size;
-  char name[2048];
+  char name[bmi::MAX_COMPONENT_NAME];
   int rank;
   int grid;
 
