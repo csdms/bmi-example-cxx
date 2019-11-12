@@ -1,11 +1,10 @@
-#include <heat/bmi_heat.hxx>
+#include <bmi_heat.hxx>
 
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 
 void print_matrix (double *m, int n_dims, int * shape);
-void print_var_values (BmiHeat model, const char *var_name);
 
 int
 main (void)
@@ -18,18 +17,20 @@ main (void)
   int size;
   char name[2048];
   int rank;
+  int grid;
 
-  model.Initialize("");
+  model.Initialize("config.txt");
 
   model.GetComponentName(name);
   std::cout << name << std::endl;
 
-  model.GetVarRank("plate_surface__temperature", &rank);
+  grid = model.GetVarGrid("plate_surface__temperature");
+  rank = model.GetGridRank(grid);
 
   shape = new int[rank];
-  model.GetGridShape("plate_surface__temperature", shape);
+  model.GetGridShape(grid, shape);
 
-  model.GetValuePtr("plate_surface__temperature", (char**)(&new_vals));
+  new_vals = (double *)model.GetValuePtr("plate_surface__temperature");
 
   fprintf (stdout, "Values before set\n");
   fprintf (stdout, "=================\n");
@@ -37,15 +38,15 @@ main (void)
 
   new_vals[0] = -1;
 
-  model.GetVarSize("plate_surface__temperature", &size);
+  size = model.GetGridSize(grid);
   new_vals = new double[size];
 
-  model.GetValue("plate_surface__temperature", (char*)new_vals);
+  model.GetValue("plate_surface__temperature", new_vals);
   print_matrix (new_vals, rank, shape);
 
   new_vals[0] = 1.;
 
-  model.SetValue("plate_surface__temperature", (char*)new_vals);
+  model.SetValue("plate_surface__temperature", new_vals);
 
   fprintf (stdout, "Values after set\n");
   fprintf (stdout, "================\n");
@@ -74,31 +75,4 @@ print_matrix (double *m, int n_dims, int * shape)
       fprintf (stdout, "%f ", m[i*shape[1]+j]);
     fprintf (stdout, "\n");
   }
-}
-
-void
-print_var_values(BmiHeat model, const char *var_name)
-{
-  int rank;
-  int *shape;
-  double *var = NULL;
-  int i, j;
-
-  model.GetVarRank(var_name, &rank);
-  shape = new int[rank];
-
-  model.GetGridShape(var_name, shape);
-
-  var = new double[shape[0]*shape[1]];
-
-  model.GetValue(var_name, (char*)var);
-
-  fprintf (stdout, "Variable: %s\n", var_name);
-
-  print_matrix (var, rank, shape);
-
-  delete var;
-  delete shape;
-
-  return;
 }
