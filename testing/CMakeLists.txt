@@ -1,33 +1,15 @@
-cmake_minimum_required(VERSION 3.0)
-
 include (CTest)
 
-add_test (BMI_IRF test_irf)
-add_test (BMI_VAR_NAMES test_print_var_names)
-add_test (BMI_GET_VALUES test_get_value)
-add_test (BMI_SET_VALUES test_set_value)
-add_test (BMI_GRID_INFO test_grid_info)
+include_directories( ${CMAKE_SOURCE_DIR}/heat )
 
-set (BUILD_SHARED_LIBS ON)
+function(make_test test_name)
+  add_test(NAME ${test_name} COMMAND ${test_name})
+  add_executable(${test_name} ${test_name}.cxx)
+  target_link_libraries(${test_name} bmiheatcxx)
+endfunction(make_test)
 
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../heat )
-
-########### BMI main program ###############
-
-set (bmi_irf_SRCS test_irf.cxx)
-set (bmi_var_names_SRCS test_print_var_names.cxx)
-set (bmi_get_value_SRCS test_get_value.cxx)
-set (bmi_set_value_SRCS test_set_value.cxx)
-set (bmi_grid_info_SRCS test_grid_info.cxx)
-
-add_executable(test_irf ${bmi_irf_SRCS})
-add_executable(test_print_var_names ${bmi_var_names_SRCS})
-add_executable(test_get_value ${bmi_get_value_SRCS})
-add_executable(test_set_value ${bmi_set_value_SRCS})
-add_executable(test_grid_info ${bmi_grid_info_SRCS})
-
-target_link_libraries(test_irf bmiheatcxx)
-target_link_libraries(test_print_var_names bmiheatcxx)
-target_link_libraries(test_get_value bmiheatcxx)
-target_link_libraries(test_set_value bmiheatcxx)
-target_link_libraries(test_grid_info bmiheatcxx)
+make_test(test_irf)
+make_test(test_print_var_names)
+make_test(test_get_value)
+make_test(test_set_value)
+make_test(test_grid_info)
