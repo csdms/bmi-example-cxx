@@ -31,12 +31,12 @@ class BmiHeat : public bmi::Bmi {
     void GetInputVarNames(char **names);
     void GetOutputVarNames(char **names);
 
-    int GetVarGrid(const char *name);
-    void GetVarType(const char *name, char *type);
-    int GetVarItemsize(const char *name);
-    void GetVarUnits(const char *name, char *units);
-    int GetVarNbytes(const char *name);
-    void GetVarLocation(const char *name, char *location);
+  int GetVarGrid(std::string name);
+    void GetVarType(std::string name, char *type);
+    int GetVarItemsize(std::string name);
+    void GetVarUnits(std::string name, char *units);
+    int GetVarNbytes(std::string name);
+    void GetVarLocation(std::string name, char *location);
 
     double GetCurrentTime();
     double GetStartTime();
@@ -44,12 +44,12 @@ class BmiHeat : public bmi::Bmi {
     void GetTimeUnits(char *units);
     double GetTimeStep();
 
-    void GetValue(const char *name, void *dest);
-    void *GetValuePtr(const char *name);
-    void GetValueAtIndices(const char *name, void *dest, int *inds, int count);
+    void GetValue(std::string name, void *dest);
+    void *GetValuePtr(std::string name);
+    void GetValueAtIndices(std::string name, void *dest, int *inds, int count);
 
-    void SetValue(const char *name, void *src);
-    void SetValueAtIndices(const char *name, int *inds, int len, void *src);
+    void SetValue(std::string name, void *src);
+    void SetValueAtIndices(std::string name, int *inds, int len, void *src);
 
     int GetGridRank(const int grid);
     int GetGridSize(const int grid);

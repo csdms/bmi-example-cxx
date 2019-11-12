@@ -55,9 +55,9 @@ Finalize()
 
 
 int BmiHeat::
-GetVarGrid(const char * name)
+GetVarGrid(std::string name)
 {
-  if (strcmp(name, "plate_surface__temperature") == 0)
+  if (name.compare("plate_surface__temperature") == 0)
     return 0;
   else
     return -1;
@@ -65,9 +65,9 @@ GetVarGrid(const char * name)
 
 
 void BmiHeat::
-GetVarType(const char * name, char * type)
+GetVarType(std::string name, char * type)
 {
-  if (strcmp(name, "plate_surface__temperature") == 0)
+  if (name.compare("plate_surface__temperature") == 0)
     strncpy(type, "double", bmi::MAX_TYPE_NAME);
   else
     strncpy(type, "", bmi::MAX_TYPE_NAME);
@@ -75,9 +75,9 @@ GetVarType(const char * name, char * type)
 
 
 int BmiHeat::
-GetVarItemsize(const char *name)
+GetVarItemsize(std::string name)
 {
-  if (strcmp(name, "plate_surface__temperature") == 0)
+  if (name.compare("plate_surface__temperature") == 0)
     return sizeof(double);
   else
     return 0;
@@ -85,9 +85,9 @@ GetVarItemsize(const char *name)
 
 
 void BmiHeat::
-GetVarUnits(const char * name, char * units)
+GetVarUnits(std::string name, char * units)
 {
-  if (strcmp(name, "plate_surface__temperature") == 0)
+  if (name.compare("plate_surface__temperature") == 0)
     strncpy(units, "meters", bmi::MAX_UNITS_NAME);
   else
     strncpy(units, "", bmi::MAX_UNITS_NAME);
@@ -95,7 +95,7 @@ GetVarUnits(const char * name, char * units)
 
 
 int BmiHeat::
-GetVarNbytes(const char * name)
+GetVarNbytes(std::string name)
 {
   int itemsize;
   int gridsize;
@@ -108,9 +108,9 @@ GetVarNbytes(const char * name)
 
 
 void BmiHeat::
-GetVarLocation(const char *name, char *location)
+GetVarLocation(std::string name, char *location)
 {
-  if (strcmp(name, "plate_surface__temperature") == 0)
+  if (name.compare("plate_surface__temperature") == 0)
     strncpy(location, "node", bmi::MAX_UNITS_NAME);
   else
     strncpy(location, "", bmi::MAX_UNITS_NAME);
@@ -253,7 +253,7 @@ GetGridNodesPerFace(const int grid, int *nodes_per_face)
 
 
 void BmiHeat::
-GetValue (const char * name, void *dest)
+GetValue (std::string name, void *dest)
 {
   void * src = NULL;
   int nbytes = 0;
@@ -266,9 +266,9 @@ GetValue (const char * name, void *dest)
 
 
 void *BmiHeat::
-GetValuePtr (const char * name)
+GetValuePtr (std::string name)
 {
-  if (strcmp(name, "plate_surface__temperature") == 0)
+  if (name.compare("plate_surface__temperature") == 0)
     return (void*)this->_model.z[0];
   else
     return NULL;
@@ -276,7 +276,7 @@ GetValuePtr (const char * name)
 
 
 void BmiHeat::
-GetValueAtIndices (const char *name, void *dest, int *inds, int len)
+GetValueAtIndices (std::string name, void *dest, int *inds, int len)
 {
   void * src = NULL;
 
@@ -299,7 +299,7 @@ GetValueAtIndices (const char *name, void *dest, int *inds, int len)
 
 
 void BmiHeat::
-SetValue (const char * name, void *src)
+SetValue (std::string name, void *src)
 {
   void * dest = NULL;
 
@@ -314,7 +314,7 @@ SetValue (const char * name, void *src)
 
 
 void BmiHeat::
-SetValueAtIndices (const char * name, int * inds, int len, void *src)
+SetValueAtIndices (std::string name, int * inds, int len, void *src)
 {
   void * dest = NULL;
 
