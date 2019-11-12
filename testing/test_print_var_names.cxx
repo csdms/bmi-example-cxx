@@ -1,4 +1,4 @@
-#include <heat/bmi_heat.hxx>
+#include <bmi_heat.hxx>
 
 #include <iostream>
 #include <stdio.h>
@@ -32,7 +32,7 @@ print_var_names (BmiHeat model)
   char **names;
   int number_of_names;
 
-  model.GetInputVarNameCount(&number_of_names);
+  number_of_names = model.GetInputItemCount();
   fprintf (stdout, "Number of input names: %d\n", number_of_names);
 
   names = new char*[number_of_names];
@@ -45,7 +45,7 @@ print_var_names (BmiHeat model)
     fprintf (stdout, "%s\n", names[i]);
   fprintf (stdout, "\n");
 
-  model.GetOutputVarNameCount(&number_of_names);
+  number_of_names = model.GetOutputItemCount();
   fprintf (stdout, "Number of output names: %d\n", number_of_names);
 
   names = new char*[number_of_names];

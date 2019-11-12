@@ -1,4 +1,4 @@
-#include <heat/bmi_heat.hxx>
+#include <bmi_heat.hxx>
 
 #include <iostream>
 #include <stdio.h>
@@ -44,13 +44,15 @@ main (void)
 void
 print_var_column(BmiHeat model, const char *name, int colno)
 {
+  int grid;
   int * shape;
   int rank;
 
-  model.GetVarRank(name, &rank);
+  grid = model.GetVarGrid(name);
+  rank = model.GetGridRank(grid);
 
   shape = new int[rank];
-  model.GetGridShape(name, shape);
+  model.GetGridShape(grid, shape);
 
   {
     int * inds = (int*)malloc(sizeof(int)*shape[0]);
@@ -61,7 +63,7 @@ print_var_column(BmiHeat model, const char *name, int colno)
       inds[i] = inds[i-1] + shape[1];
 
     col = new double[shape[0]];
-    model.GetValueAtIndices(name, (char*)col, inds, shape[0]);
+    model.GetValueAtIndices(name, col, inds, shape[0]);
 
     fprintf (stdout, "Column %d: ", colno);
     for (int i=0; i<shape[0]; i++)
@@ -82,18 +84,20 @@ print_var_values(BmiHeat model, const char *var_name)
 {
   double *var = NULL;
   int i, j;
+  int grid;
   int * shape;
   int rank;
   int size;
 
-  model.GetVarRank(var_name, &rank);
+  grid = model.GetVarGrid(var_name);
+  rank = model.GetGridRank(grid);
+  size = model.GetGridSize(grid);
 
   shape = new int[rank];
-  model.GetGridShape(var_name, shape);
-  model.GetVarSize(var_name, &size);
+  model.GetGridShape(grid, shape);
 
   var = new double[size];
-  model.GetValue(var_name, (char*)var);
+  model.GetValue(var_name, var);
 
   fprintf (stdout, "Variable: %s\n", var_name);
   fprintf (stdout, "Number of dimension: %d\n", rank);

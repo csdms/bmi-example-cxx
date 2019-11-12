@@ -1,4 +1,4 @@
-#include <heat/bmi_heat.hxx>
+#include <bmi_heat.hxx>
 
 #include <iostream>
 #include <stdio.h>
@@ -27,13 +27,13 @@ main (void)
       fprintf(stderr, "Updating\n"); fflush(stderr);
       model.Update();
       fprintf(stderr, "Updated\n"); fflush(stderr);
-      model.GetCurrentTime(&now);
+      now = model.GetCurrentTime();
 
       fprintf (stdout, "Time: %f\n", now);
     }
-    model.GetEndTime(&then);
+    then = model.GetEndTime();
     model.UpdateUntil(then);
-    model.GetCurrentTime(&now);
+    now = model.GetCurrentTime();
 
     fprintf (stdout, "Time: %f\n", now);
     fprintf (stdout, "Done\n");

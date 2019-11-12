@@ -2,10 +2,12 @@
 #define BMI_HEAT_H_INCLUDED
 
 #include <string>
-#include <heat/heat.hxx>
+
+#include <bmi.hxx>
+#include "heat.hxx"
 
 
-class BmiHeat {
+class BmiHeat : public bmi::Bmi {
   public:
     BmiHeat() {
       this->input_var_names[0] = "plate_surface__temperature";
@@ -14,44 +16,55 @@ class BmiHeat {
 
     void Initialize (std::string config_file);
     void Update();
-    void UpdateUntil(double);
-    void UpdateFrac(double);
+    void UpdateUntil(double time);
     void Finalize();
 
     void GetComponentName(char *name);
-    void GetInputVarNameCount(int * count);
-    void GetOutputVarNameCount(int * count);
-    void GetInputVarNames(char** names);
-    void GetOutputVarNames(char** names);
+    int GetInputItemCount();
+    int GetOutputItemCount();
+    void GetInputVarNames(char **names);
+    void GetOutputVarNames(char **names);
 
-    void GetVarType(const char * name, char* type);
-    void GetVarItemsize(const char * name, int* itemsize);
-    void GetVarUnits(const char * name, char* units);
-    void GetVarRank(const char * name, int* rank);
-    void GetVarSize(const char * name, int* size);
-    void GetVarNbytes(const char * name, int* nbytes);
+    int GetVarGrid(const char *name);
+    void GetVarType(const char *name, char *type);
+    int GetVarItemsize(const char *name);
+    void GetVarUnits(const char *name, char *units);
+    int GetVarNbytes(const char *name);
+    void GetVarLocation(const char *name, char *location);
 
-    void GetCurrentTime(double *time);
-    void GetStartTime(double *start);
-    void GetEndTime(double *end);
-    void GetTimeStep(double *dt);
+    double GetCurrentTime();
+    double GetStartTime();
+    double GetEndTime();
     void GetTimeUnits(char *units);
+    double GetTimeStep();
 
-    void GetValue(const char *, char *);
-    void GetValuePtr(const char *, char **);
-    void GetValueAtIndices(const char *, char *dest, int * inds, int len);
+    void GetValue(const char *name, void *dest);
+    void *GetValuePtr(const char *name);
+    void GetValueAtIndices(const char *name, void *dest, int *inds, int count);
 
-    void SetValue(const char *, char *);
-    void SetValuePtr(const char *, char **);
-    void SetValueAtIndices(const char * name, int * inds, int len, char *src);
+    void SetValue(const char *name, void *src);
+    void SetValueAtIndices(const char *name, int *inds, int len, void *src);
 
-    void GetGridType(const char *, char *);
-    void GetGridShape(const char *, int *);
-    void GetGridSpacing(const char *, double *);
-    void GetGridOrigin(const char *, double *);
+    int GetGridRank(const int grid);
+    int GetGridSize(const int grid);
+    void GetGridType(const int grid, char *type);
 
-    void GetGridX(const char *, double *);
-    void GetGridY(const char *, double *);
+    void GetGridShape(const int grid, int *shape);
+    void GetGridSpacing(const int grid, double *spacing);
+    void GetGridOrigin(const int grid, double *origin);
+
+    void GetGridX(const int grid, double *x);
+    void GetGridY(const int grid, double *y);
+    void GetGridZ(const int grid, double *z);
+
+    int GetGridNodeCount(const int grid);
+    int GetGridEdgeCount(const int grid);
+    int GetGridFaceCount(const int grid);
+
+    void GetGridEdgeNodes(const int grid, int *edge_nodes);
+    void GetGridFaceEdges(const int grid, int *face_edges);
+    void GetGridFaceNodes(const int grid, int *face_nodes);
+    void GetGridNodesPerFace(const int grid, int *nodes_per_face);
 
   private:
     heat::Heat _model;
