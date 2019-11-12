@@ -185,70 +185,70 @@ GetGridType (const int grid, char * type)
 void BmiHeat::
 GetGridX(const int grid, double *x)
 {
-  throw "Not implemented";
+  throw NotImplemented();
 }
 
 
 void BmiHeat::
 GetGridY(const int grid, double *y)
 {
-  throw "Not implemented";
+  throw NotImplemented();
 }
 
 
 void BmiHeat::
 GetGridZ(const int grid, double *z)
 {
-  throw "Not implemented";
+  throw NotImplemented();
 }
 
 
 int BmiHeat::
 GetGridNodeCount(const int grid)
 {
-  throw "Not implemented";
+  throw NotImplemented();
 }
 
 
 int BmiHeat::
 GetGridEdgeCount(const int grid)
 {
-  throw "Not implemented";
+  throw NotImplemented();
 }
 
 
 int BmiHeat::
 GetGridFaceCount(const int grid)
 {
-  throw "Not implemented";
+  throw NotImplemented();
 }
 
 
 void BmiHeat::
 GetGridEdgeNodes(const int grid, int *edge_nodes)
 {
-  throw "Not implemented";
+  throw NotImplemented();
 }
 
 
 void BmiHeat::
 GetGridFaceEdges(const int grid, int *face_edges)
 {
-  throw "Not implemented";
+  throw NotImplemented();
 }
 
 
 void BmiHeat::
 GetGridFaceNodes(const int grid, int *face_nodes)
 {
-  throw "Not implemented";
+  throw NotImplemented();
 }
 
 
 void BmiHeat::
 GetGridNodesPerFace(const int grid, int *nodes_per_face)
 {
-  throw "Not implemented";
+  throw NotImplemented();
 }
 
 
