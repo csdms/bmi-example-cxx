@@ -14,6 +14,8 @@ make_test(test_get_value)
 make_test(test_set_value)
 make_test(test_grid_info)
 make_test(test_initialize_from_file)
+make_test(test_reinitialize)
+make_test(test_conflicting_instances)
 
 file(
   COPY ${CMAKE_CURRENT_SOURCE_DIR}/config.txt
