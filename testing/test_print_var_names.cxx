@@ -12,11 +12,11 @@ main (void)
   int i;
   const int n_steps = 10;
   BmiHeat model;
-  char name[2048];
+  std::string name;
 
   model.Initialize("");
 
-  model.GetComponentName(name);
+  name = model.GetComponentName();
   std::cout << name << std::endl;
 
   print_var_names (model);
@@ -37,7 +37,7 @@ print_var_names (BmiHeat model)
 
   names = new char*[number_of_names];
   for (int i=0; i<number_of_names; i++) {
-    names[i] = new char[2048];
+    names[i] = new char[bmi::MAX_VAR_NAME];
   }
 
   model.GetInputVarNames(names);
@@ -50,7 +50,7 @@ print_var_names (BmiHeat model)
 
   names = new char*[number_of_names];
   for (int i=0; i<number_of_names; i++) {
-    names[i] = new char[2048];
+    names[i] = new char[bmi::MAX_VAR_NAME];
   }
 
   model.GetOutputVarNames(names);

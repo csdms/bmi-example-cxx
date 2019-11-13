@@ -15,13 +15,13 @@ main (void)
   double *new_vals = NULL;
   int *shape = NULL;
   int size;
-  char name[2048];
+  std::string name;
   int rank;
   int grid;
 
   model.Initialize("config.txt");
 
-  model.GetComponentName(name);
+  name = model.GetComponentName();
   std::cout << name << std::endl;
 
   grid = model.GetVarGrid("plate_surface__temperature");

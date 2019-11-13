@@ -15,12 +15,12 @@ main (void)
   const int n_steps = 10;
   BmiHeat model;
   int size;
-  char name[2048];
+  std::string name;
   int rank;
 
   model.Initialize("");
 
-  model.GetComponentName(name);
+  name = model.GetComponentName();
   std::cout << name << std::endl;
 
   for (i = 0; i<n_steps; i++)

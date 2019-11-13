@@ -11,7 +11,7 @@ main (void)
   std::string name;
 
   fprintf (stdout, "Initializing... ");
-  model.Initialize ("");
+  model.Initialize ("config.txt");
   fprintf (stdout, "Done\n");
 
   name = model.GetComponentName();

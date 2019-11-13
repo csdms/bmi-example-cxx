@@ -33,10 +33,10 @@ UpdateUntil(double t)
   dt = this->GetTimeStep();
 
   {
-    const int n_steps = (t - time) / dt;
+    double n_steps = (t - time) / dt;
     double frac;
 
-    for (int n=0; n<n_steps; n++)
+    for (int n=0; n<int(n_steps); n++)
       this->Update();
 
     frac = n_steps - int(n_steps);
@@ -55,47 +55,47 @@ Finalize()
 
 
 int BmiHeat::
-GetVarGrid(const char * name)
+GetVarGrid(std::string name)
 {
-  if (strcmp(name, "plate_surface__temperature") == 0)
+  if (name.compare("plate_surface__temperature") == 0)
     return 0;
   else
     return -1;
 }
 
 
-void BmiHeat::
-GetVarType(const char * name, char * type)
+std::string BmiHeat::
+GetVarType(std::string name)
 {
-  if (strcmp(name, "plate_surface__temperature") == 0)
-    strncpy(type, "double", 2048);
+  if (name.compare("plate_surface__temperature") == 0)
+    return "double";
   else
-    strncpy(type, "", 2048);
+    return "";
 }
 
 
 int BmiHeat::
-GetVarItemsize(const char *name)
+GetVarItemsize(std::string name)
 {
-  if (strcmp(name, "plate_surface__temperature") == 0)
+  if (name.compare("plate_surface__temperature") == 0)
     return sizeof(double);
   else
     return 0;
 }
 
 
-void BmiHeat::
-GetVarUnits(const char * name, char * units)
+std::string BmiHeat::
+GetVarUnits(std::string name)
 {
-  if (strcmp(name, "plate_surface__temperature") == 0)
-    strncpy(units, "meters", 2048);
+  if (name.compare("plate_surface__temperature") == 0)
+    return "meters";
   else
-    strncpy(units, "", 2048);
+    return "";
 }
 
 
 int BmiHeat::
-GetVarNbytes(const char * name)
+GetVarNbytes(std::string name)
 {
   int itemsize;
   int gridsize;
@@ -107,13 +107,13 @@ GetVarNbytes(const char * name)
 }
 
 
-void BmiHeat::
-GetVarLocation(const char *name, char *location)
+std::string BmiHeat::
+GetVarLocation(std::string name)
 {
-  if (strcmp(name, "plate_surface__temperature") == 0)
-    strncpy(location, "node", bmi::MAX_UNITS_NAME);
+  if (name.compare("plate_surface__temperature") == 0)
+    return "node";
   else
-    strncpy(location, "", bmi::MAX_UNITS_NAME);
+    return "";
 }
 
 
@@ -172,88 +172,88 @@ GetGridSize(const int grid)
 }
 
 
-void BmiHeat::
-GetGridType (const int grid, char * type)
+std::string BmiHeat::
+GetGridType(const int grid)
 {
   if (grid == 0)
-    strncpy(type, "uniform_rectilinear", 2048);
+    return "uniform_rectilinear";
   else
-    strncpy(type, "", 2048);
+    return "";
 }
 
 
 void BmiHeat::
 GetGridX(const int grid, double *x)
 {
-  throw "Not implemented";
+  throw NotImplemented();
 }
 
 
 void BmiHeat::
 GetGridY(const int grid, double *y)
 {
-  throw "Not implemented";
+  throw NotImplemented();
 }
 
 
 void BmiHeat::
 GetGridZ(const int grid, double *z)
 {
-  throw "Not implemented";
+  throw NotImplemented();
 }
 
 
 int BmiHeat::
 GetGridNodeCount(const int grid)
 {
-  throw "Not implemented";
+  throw NotImplemented();
 }
 
 
 int BmiHeat::
 GetGridEdgeCount(const int grid)
 {
-  throw "Not implemented";
+  throw NotImplemented();
 }
 
 
 int BmiHeat::
 GetGridFaceCount(const int grid)
 {
-  throw "Not implemented";
+  throw NotImplemented();
 }
 
 
 void BmiHeat::
 GetGridEdgeNodes(const int grid, int *edge_nodes)
 {
-  throw "Not implemented";
+  throw NotImplemented();
 }
 
 
 void BmiHeat::
 GetGridFaceEdges(const int grid, int *face_edges)
 {
-  throw "Not implemented";
+  throw NotImplemented();
 }
 
 
 void BmiHeat::
 GetGridFaceNodes(const int grid, int *face_nodes)
 {
-  throw "Not implemented";
+  throw NotImplemented();
 }
 
 
 void BmiHeat::
 GetGridNodesPerFace(const int grid, int *nodes_per_face)
 {
-  throw "Not implemented";
+  throw NotImplemented();
 }
 
 
 void BmiHeat::
-GetValue (const char * name, void *dest)
+GetValue (std::string name, void *dest)
 {
   void * src = NULL;
   int nbytes = 0;
@@ -266,9 +266,9 @@ GetValue (const char * name, void *dest)
 
 
 void *BmiHeat::
-GetValuePtr (const char * name)
+GetValuePtr (std::string name)
 {
-  if (strcmp(name, "plate_surface__temperature") == 0)
+  if (name.compare("plate_surface__temperature") == 0)
     return (void*)this->_model.z[0];
   else
     return NULL;
@@ -276,7 +276,7 @@ GetValuePtr (const char * name)
 
 
 void BmiHeat::
-GetValueAtIndices (const char *name, void *dest, int *inds, int len)
+GetValueAtIndices (std::string name, void *dest, int *inds, int len)
 {
   void * src = NULL;
 
@@ -299,7 +299,7 @@ GetValueAtIndices (const char *name, void *dest, int *inds, int len)
 
 
 void BmiHeat::
-SetValue (const char * name, void *src)
+SetValue (std::string name, void *src)
 {
   void * dest = NULL;
 
@@ -314,7 +314,7 @@ SetValue (const char * name, void *src)
 
 
 void BmiHeat::
-SetValueAtIndices (const char * name, int * inds, int len, void *src)
+SetValueAtIndices (std::string name, int * inds, int len, void *src)
 {
   void * dest = NULL;
 
@@ -336,10 +336,10 @@ SetValueAtIndices (const char * name, int * inds, int len, void *src)
 }
 
 
-void BmiHeat::
-GetComponentName (char * name)
+std::string BmiHeat::
+GetComponentName()
 {
-  strncpy(name, "The 2D Heat Equation", 2048);
+  return "The 2D Heat Equation";
 }
 
 
@@ -361,7 +361,7 @@ void BmiHeat::
 GetInputVarNames (char **names)
 {
   for (int i=0; i<this->input_var_name_count; i++) {
-    strncpy(names[i], (const char *)this->input_var_names[i], 2048);
+    strncpy(names[i], (const char *)this->input_var_names[i], bmi::MAX_VAR_NAME);
   }
 }
 
@@ -370,7 +370,7 @@ void BmiHeat::
 GetOutputVarNames (char **names)
 {
   for (int i=0; i<this->input_var_name_count; i++) {
-    strncpy(names[i], (const char *)this->output_var_names[i], 2048);
+    strncpy(names[i], (const char *)this->output_var_names[i], bmi::MAX_VAR_NAME);
   }
 }
 
@@ -393,9 +393,9 @@ GetCurrentTime () {
 }
 
 
-void BmiHeat::
-GetTimeUnits (char * units) {
-  strncpy(units, "d", 2048);
+std::string BmiHeat::
+GetTimeUnits() {
+  return "s";
 }
 
 

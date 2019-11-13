@@ -11,11 +11,11 @@ int
 main (void)
 {
   BmiHeat model;
-  char name[2048];
+  std::string name;
 
   model.Initialize("");
 
-  model.GetComponentName(name);
+  name = model.GetComponentName();
   std::cout << name << std::endl;
 
   {
@@ -25,7 +25,7 @@ main (void)
     number_of_names = model.GetInputItemCount();
     names = new char*[number_of_names];
     for (int i=0; i<number_of_names; i++) {
-      names[i] = new char[2048];
+      names[i] = new char[bmi::MAX_VAR_NAME];
     }
 
     model.GetInputVarNames(names);
@@ -35,7 +35,7 @@ main (void)
     number_of_names = model.GetOutputItemCount();
     names = new char*[number_of_names];
     for (int i=0; i<number_of_names; i++) {
-      names[i] = new char[2048];
+      names[i] = new char[bmi::MAX_VAR_NAME];
     }
 
     model.GetOutputVarNames(names);
@@ -56,20 +56,20 @@ print_var_info(BmiHeat model, char *var)
   double *spacing;
   double *origin;
   int grid;
-  char type[2048];
-  char units[2048];
+  std::string type;
+  std::string units;
   int rank;
   int size;
   int nbytes;
-  char grid_type[2048];
+  std::string grid_type;
 
-  model.GetVarType(var, type);
-  model.GetVarUnits(var, units);
+  type = model.GetVarType(var);
+  units = model.GetVarUnits(var);
   nbytes = model.GetVarNbytes(var);
   grid = model.GetVarGrid(var);
   rank = model.GetGridRank(grid);
   size = model.GetGridSize(grid);
-  model.GetGridType(grid, grid_type);
+  grid_type = model.GetGridType(grid);
 
   shape = new int[rank];
   spacing = new double[rank];
@@ -83,12 +83,12 @@ print_var_info(BmiHeat model, char *var)
   fprintf (stdout, "Variable info\n");
   fprintf (stdout, "=============\n");
   fprintf (stdout, "Name: %s\n", var);
-  fprintf (stdout, "Type: %s\n", type);
-  fprintf (stdout, "Units: %s\n", units);
+  fprintf (stdout, "Type: %s\n", type.c_str());
+  fprintf (stdout, "Units: %s\n", units.c_str());
   fprintf (stdout, "Rank: %d\n", rank);
   fprintf (stdout, "Size: %d\n", size);
   fprintf (stdout, "Nbytes: %d\n", nbytes);
-  fprintf (stdout, "Grid: %s\n", grid_type);
+  fprintf (stdout, "Grid: %s\n", grid_type.c_str());
   fprintf (stdout, "Dimension: %d x %d\n", shape[0], shape[1]);
   fprintf (stdout, "Resolution: %f x %f\n", spacing[0], spacing[1]);
   fprintf (stdout, "Corner: (%f, %f)\n", origin[0], origin[1]);

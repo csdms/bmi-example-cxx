@@ -7,6 +7,12 @@
 #include "heat.hxx"
 
 
+class NotImplemented : public std::logic_error {
+  public:
+  NotImplemented() : std::logic_error("Not Implemented") { };
+};
+
+
 class BmiHeat : public bmi::Bmi {
   public:
     BmiHeat() {
@@ -19,35 +25,35 @@ class BmiHeat : public bmi::Bmi {
     void UpdateUntil(double time);
     void Finalize();
 
-    void GetComponentName(char *name);
+    std::string GetComponentName();
     int GetInputItemCount();
     int GetOutputItemCount();
     void GetInputVarNames(char **names);
     void GetOutputVarNames(char **names);
 
-    int GetVarGrid(const char *name);
-    void GetVarType(const char *name, char *type);
-    int GetVarItemsize(const char *name);
-    void GetVarUnits(const char *name, char *units);
-    int GetVarNbytes(const char *name);
-    void GetVarLocation(const char *name, char *location);
+    int GetVarGrid(std::string name);
+    std::string GetVarType(std::string name);
+    int GetVarItemsize(std::string name);
+    std::string GetVarUnits(std::string name);
+    int GetVarNbytes(std::string name);
+    std::string GetVarLocation(std::string name);
 
     double GetCurrentTime();
     double GetStartTime();
     double GetEndTime();
-    void GetTimeUnits(char *units);
+    std::string GetTimeUnits();
     double GetTimeStep();
 
-    void GetValue(const char *name, void *dest);
-    void *GetValuePtr(const char *name);
-    void GetValueAtIndices(const char *name, void *dest, int *inds, int count);
+    void GetValue(std::string name, void *dest);
+    void *GetValuePtr(std::string name);
+    void GetValueAtIndices(std::string name, void *dest, int *inds, int count);
 
-    void SetValue(const char *name, void *src);
-    void SetValueAtIndices(const char *name, int *inds, int len, void *src);
+    void SetValue(std::string name, void *src);
+    void SetValueAtIndices(std::string name, int *inds, int len, void *src);
 
     int GetGridRank(const int grid);
     int GetGridSize(const int grid);
-    void GetGridType(const int grid, char *type);
+    std::string GetGridType(const int grid);
 
     void GetGridShape(const int grid, int *shape);
     void GetGridSpacing(const int grid, double *spacing);
