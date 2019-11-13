@@ -74,8 +74,8 @@ Heat(std::string config_file)
   this->shape[1] = n_x;
   this->spacing[0] = 1.;
   this->spacing[1] = 1.;
-  this->spacing[0] = 0.;
-  this->spacing[1] = 0.;
+  this->origin[0] = 0.;
+  this->origin[1] = 0.;
 
   this->_initialize_arrays();
 }
