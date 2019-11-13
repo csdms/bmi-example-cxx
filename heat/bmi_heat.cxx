@@ -33,10 +33,10 @@ UpdateUntil(double t)
   dt = this->GetTimeStep();
 
   {
-    const int n_steps = (t - time) / dt;
+    double n_steps = (t - time) / dt;
     double frac;
 
-    for (int n=0; n<n_steps; n++)
+    for (int n=0; n<int(n_steps); n++)
       this->Update();
 
     frac = n_steps - int(n_steps);
