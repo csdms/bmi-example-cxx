@@ -2,6 +2,7 @@
 #define BMI_HEAT_H_INCLUDED
 
 #include <string>
+#include <iostream>
 
 #include <bmi.hxx>
 #include "heat.hxx"
