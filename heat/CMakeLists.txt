@@ -11,8 +11,12 @@ else()
   add_library(bmiheatcxx SHARED ${bmi_heat_lib_SRCS})
 endif()
 
-########### Install files ###############
+add_executable(run_bmiheatcxx bmi_main.cxx bmi_heat.cxx heat.cxx)
 
+install(
+  TARGETS run_bmiheatcxx
+  RUNTIME DESTINATION bin
+)
 install(
   TARGETS bmiheatcxx
   LIBRARY DESTINATION lib
