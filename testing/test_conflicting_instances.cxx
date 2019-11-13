@@ -19,7 +19,7 @@ main (void)
 
   /* Does changing values in model1 change them in model2? */
   {
-    char name[bmi::MAX_COMPONENT_NAME] = "plate_surface__temperature";
+    std::string name = "plate_surface__temperature";
     int i;
     int inds[5] = {11, 22, 44, 88, 176};
     double vals[5] = {1, 2, 4, 8, 16};

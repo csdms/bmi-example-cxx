@@ -8,13 +8,13 @@ int
 main (void)
 {
   BmiHeat model;
-  char name[bmi::MAX_COMPONENT_NAME];
+  std::string name;
 
   fprintf (stdout, "Initializing... ");
   model.Initialize ("");
   fprintf (stdout, "Done\n");
 
-  model.GetComponentName(name);
+  name = model.GetComponentName();
   std::cout << name << std::endl;
 
   {
