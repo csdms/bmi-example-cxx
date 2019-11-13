@@ -25,23 +25,23 @@ class BmiHeat : public bmi::Bmi {
     void UpdateUntil(double time);
     void Finalize();
 
-    void GetComponentName(char *name);
+    std::string GetComponentName();
     int GetInputItemCount();
     int GetOutputItemCount();
     void GetInputVarNames(char **names);
     void GetOutputVarNames(char **names);
 
-  int GetVarGrid(std::string name);
-    void GetVarType(std::string name, char *type);
+    int GetVarGrid(std::string name);
+    std::string GetVarType(std::string name);
     int GetVarItemsize(std::string name);
-    void GetVarUnits(std::string name, char *units);
+    std::string GetVarUnits(std::string name);
     int GetVarNbytes(std::string name);
-    void GetVarLocation(std::string name, char *location);
+    std::string GetVarLocation(std::string name);
 
     double GetCurrentTime();
     double GetStartTime();
     double GetEndTime();
-    void GetTimeUnits(char *units);
+    std::string GetTimeUnits();
     double GetTimeStep();
 
     void GetValue(std::string name, void *dest);
@@ -53,7 +53,7 @@ class BmiHeat : public bmi::Bmi {
 
     int GetGridRank(const int grid);
     int GetGridSize(const int grid);
-    void GetGridType(const int grid, char *type);
+    std::string GetGridType(const int grid);
 
     void GetGridShape(const int grid, int *shape);
     void GetGridSpacing(const int grid, double *spacing);

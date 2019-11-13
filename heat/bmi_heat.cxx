@@ -64,13 +64,13 @@ GetVarGrid(std::string name)
 }
 
 
-void BmiHeat::
-GetVarType(std::string name, char * type)
+std::string BmiHeat::
+GetVarType(std::string name)
 {
   if (name.compare("plate_surface__temperature") == 0)
-    strncpy(type, "double", bmi::MAX_TYPE_NAME);
+    return "double";
   else
-    strncpy(type, "", bmi::MAX_TYPE_NAME);
+    return "";
 }
 
 
@@ -84,13 +84,13 @@ GetVarItemsize(std::string name)
 }
 
 
-void BmiHeat::
-GetVarUnits(std::string name, char * units)
+std::string BmiHeat::
+GetVarUnits(std::string name)
 {
   if (name.compare("plate_surface__temperature") == 0)
-    strncpy(units, "meters", bmi::MAX_UNITS_NAME);
+    return "meters";
   else
-    strncpy(units, "", bmi::MAX_UNITS_NAME);
+    return "";
 }
 
 
@@ -107,13 +107,13 @@ GetVarNbytes(std::string name)
 }
 
 
-void BmiHeat::
-GetVarLocation(std::string name, char *location)
+std::string BmiHeat::
+GetVarLocation(std::string name)
 {
   if (name.compare("plate_surface__temperature") == 0)
-    strncpy(location, "node", bmi::MAX_UNITS_NAME);
+    return "node";
   else
-    strncpy(location, "", bmi::MAX_UNITS_NAME);
+    return "";
 }
 
 
@@ -172,13 +172,13 @@ GetGridSize(const int grid)
 }
 
 
-void BmiHeat::
-GetGridType (const int grid, char * type)
+std::string BmiHeat::
+GetGridType(const int grid)
 {
   if (grid == 0)
-    strncpy(type, "uniform_rectilinear", bmi::MAX_VAR_NAME);
+    return "uniform_rectilinear";
   else
-    strncpy(type, "", bmi::MAX_VAR_NAME);
+    return "";
 }
 
 
@@ -336,10 +336,10 @@ SetValueAtIndices (std::string name, int * inds, int len, void *src)
 }
 
 
-void BmiHeat::
-GetComponentName (char * name)
+std::string BmiHeat::
+GetComponentName()
 {
-  strncpy(name, "The 2D Heat Equation", bmi::MAX_COMPONENT_NAME);
+  return "The 2D Heat Equation";
 }
 
 
@@ -393,9 +393,9 @@ GetCurrentTime () {
 }
 
 
-void BmiHeat::
-GetTimeUnits (char * units) {
-  strncpy(units, "d", bmi::MAX_UNITS_NAME);
+std::string BmiHeat::
+GetTimeUnits() {
+  return "s";
 }
 
 
