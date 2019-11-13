@@ -60,8 +60,7 @@ The installation will look like
 ```bash
 .
 |-- bin
-|   |-- run_bmiheatcxx
-|   `-- run_heatcxx
+|   `-- run_bmiheatcxx
 |-- include
 |   |-- bmi.hxx
 |   `-- bmi_heat.hxx
@@ -71,7 +70,7 @@ The installation will look like
         |-- bmicxx.pc
         `-- heatcxx.pc
 
-4 directories, 7 files
+4 directories, 6 files
 ```
 
 Run tests on the sample implementation with

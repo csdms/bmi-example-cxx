@@ -68,14 +68,17 @@ Heat(std::string config_file)
 
   fscanf (fp, "%lf, %lf, %d, %d", &alpha, &t_end, &n_x, &n_y);
 
+  fclose (fp);
+
+  this->alpha = alpha;
   this->dt = 1. / (4. * alpha);
   this->t_end = t_end;
   this->shape[0] = n_y;
   this->shape[1] = n_x;
   this->spacing[0] = 1.;
   this->spacing[1] = 1.;
-  this->spacing[0] = 0.;
-  this->spacing[1] = 0.;
+  this->origin[0] = 0.;
+  this->origin[1] = 0.;
 
   this->_initialize_arrays();
 }
