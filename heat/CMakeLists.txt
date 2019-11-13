@@ -24,6 +24,6 @@ install(
   DESTINATION include
 )
 install(
-  FILES ${CMAKE_CURRENT_BINARY_DIR}/heatcxx.pc
+  FILES ${CMAKE_BINARY_DIR}/heatcxx.pc
   DESTINATION lib/pkgconfig
 )
