@@ -161,15 +161,10 @@ GetGridRank(const int grid)
 int BmiHeat::
 GetGridSize(const int grid)
 {
-  int shape[2];
-
-  if (grid == 0) {
-    this->GetGridShape(grid, shape);
-    return shape[0] * shape[1];
-  }
+  if (grid == 0)
+    return this->_model.shape[0] * this->_model.shape[1];
   else
     return -1;
-
 }
 
 
