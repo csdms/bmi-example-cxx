@@ -29,8 +29,8 @@ class BmiHeat : public bmi::Bmi {
     std::string GetComponentName();
     int GetInputItemCount();
     int GetOutputItemCount();
-    void GetInputVarNames(char **names);
-    void GetOutputVarNames(char **names);
+    void GetInputVarNames(std::vector<std::string> &names);
+    void GetOutputVarNames(std::vector<std::string> &names);
 
     int GetVarGrid(std::string name);
     std::string GetVarType(std::string name);
@@ -78,8 +78,8 @@ class BmiHeat : public bmi::Bmi {
     static const int input_var_name_count = 1;
     static const int output_var_name_count = 1;
 
-    const char* input_var_names[2];
-    const char* output_var_names[2];
+    std::string input_var_names[2];
+    std::string output_var_names[2];
 };
 
 #endif

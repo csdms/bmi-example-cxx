@@ -3,6 +3,7 @@
 #include <string>
 #include <cstring>
 #include <cstdlib>
+#include<vector>
 
 #include "bmi_heat.hxx"
 #include "heat.hxx"
@@ -358,20 +359,18 @@ GetOutputItemCount()
 
 
 void BmiHeat::
-GetInputVarNames (char **names)
+GetInputVarNames(std::vector<std::string> &names)
 {
-  for (int i=0; i<this->input_var_name_count; i++) {
-    strncpy(names[i], (const char *)this->input_var_names[i], bmi::MAX_VAR_NAME);
-  }
+  for (int i=0; i<this->input_var_name_count; i++)
+    names.push_back(this->input_var_names[i]);
 }
 
 
 void BmiHeat::
-GetOutputVarNames (char **names)
+GetOutputVarNames(std::vector<std::string> &names)
 {
-  for (int i=0; i<this->input_var_name_count; i++) {
-    strncpy(names[i], (const char *)this->output_var_names[i], bmi::MAX_VAR_NAME);
-  }
+  for (int i=0; i<this->input_var_name_count; i++)
+    names.push_back(this->output_var_names[i]);
 }
 
 
