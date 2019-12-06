@@ -3,9 +3,10 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
+#include <vector>
 
 
-void print_var_info (BmiHeat model, char *var);
+void print_var_info (BmiHeat model, std::string var);
 
 int
 main (void)
@@ -20,28 +21,17 @@ main (void)
 
   {
     int number_of_names;
-    char **names;
+    std::vector<std::string> names;
 
     number_of_names = model.GetInputItemCount();
-    names = new char*[number_of_names];
-    for (int i=0; i<number_of_names; i++) {
-      names[i] = new char[bmi::MAX_VAR_NAME];
-    }
-
-    model.GetInputVarNames(names);
+    names = model.GetInputVarNames();
     for (int i=0; i<number_of_names; i++)
       print_var_info(model, names[i]);
 
     number_of_names = model.GetOutputItemCount();
-    names = new char*[number_of_names];
-    for (int i=0; i<number_of_names; i++) {
-      names[i] = new char[bmi::MAX_VAR_NAME];
-    }
-
-    model.GetOutputVarNames(names);
+    names = model.GetOutputVarNames();
     for (int i=0; i<number_of_names; i++)
       print_var_info(model, names[i]);
-
   }
 
   model.Finalize();
@@ -50,7 +40,7 @@ main (void)
 }
 
 void
-print_var_info(BmiHeat model, char *var)
+print_var_info(BmiHeat model, std::string var)
 {
   int *shape;
   double *spacing;
@@ -82,7 +72,7 @@ print_var_info(BmiHeat model, char *var)
   fprintf (stdout, "\n");
   fprintf (stdout, "Variable info\n");
   fprintf (stdout, "=============\n");
-  fprintf (stdout, "Name: %s\n", var);
+  fprintf (stdout, "Name: %s\n", var.c_str());
   fprintf (stdout, "Type: %s\n", type.c_str());
   fprintf (stdout, "Units: %s\n", units.c_str());
   fprintf (stdout, "Rank: %d\n", rank);

@@ -3,6 +3,7 @@
 #include <string>
 #include <cstring>
 #include <cstdlib>
+#include<vector>
 
 #include "bmi_heat.hxx"
 #include "heat.hxx"
@@ -160,15 +161,10 @@ GetGridRank(const int grid)
 int BmiHeat::
 GetGridSize(const int grid)
 {
-  int shape[2];
-
-  if (grid == 0) {
-    this->GetGridShape(grid, shape);
-    return shape[0] * shape[1];
-  }
+  if (grid == 0)
+    return this->_model.shape[0] * this->_model.shape[1];
   else
     return -1;
-
 }
 
 
@@ -357,21 +353,27 @@ GetOutputItemCount()
 }
 
 
-void BmiHeat::
-GetInputVarNames (char **names)
+std::vector<std::string> BmiHeat::
+GetInputVarNames()
 {
-  for (int i=0; i<this->input_var_name_count; i++) {
-    strncpy(names[i], (const char *)this->input_var_names[i], bmi::MAX_VAR_NAME);
-  }
+  std::vector<std::string> names;
+
+  for (int i=0; i<this->input_var_name_count; i++)
+    names.push_back(this->input_var_names[i]);
+
+  return names;
 }
 
 
-void BmiHeat::
-GetOutputVarNames (char **names)
+std::vector<std::string> BmiHeat::
+GetOutputVarNames()
 {
-  for (int i=0; i<this->input_var_name_count; i++) {
-    strncpy(names[i], (const char *)this->output_var_names[i], bmi::MAX_VAR_NAME);
-  }
+  std::vector<std::string> names;
+
+  for (int i=0; i<this->input_var_name_count; i++)
+    names.push_back(this->output_var_names[i]);
+
+  return names;
 }
 
 
