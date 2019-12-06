@@ -24,12 +24,12 @@ main (void)
     std::vector<std::string> names;
 
     number_of_names = model.GetInputItemCount();
-    model.GetInputVarNames(names);
+    names = model.GetInputVarNames();
     for (int i=0; i<number_of_names; i++)
       print_var_info(model, names[i]);
 
     number_of_names = model.GetOutputItemCount();
-    model.GetOutputVarNames(names);
+    names = model.GetOutputVarNames();
     for (int i=0; i<number_of_names; i++)
       print_var_info(model, names[i]);
   }

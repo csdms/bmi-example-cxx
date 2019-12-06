@@ -21,7 +21,7 @@ class BmiHeat : public bmi::Bmi {
       this->output_var_names[0] = "plate_surface__temperature";
     };
 
-    void Initialize (std::string config_file);
+    void Initialize(std::string config_file);
     void Update();
     void UpdateUntil(double time);
     void Finalize();
@@ -29,8 +29,8 @@ class BmiHeat : public bmi::Bmi {
     std::string GetComponentName();
     int GetInputItemCount();
     int GetOutputItemCount();
-    void GetInputVarNames(std::vector<std::string> &names);
-    void GetOutputVarNames(std::vector<std::string> &names);
+    std::vector<std::string> GetInputVarNames();
+    std::vector<std::string> GetOutputVarNames();
 
     int GetVarGrid(std::string name);
     std::string GetVarType(std::string name);

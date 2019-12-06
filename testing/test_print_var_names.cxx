@@ -36,14 +36,14 @@ print_var_names (BmiHeat model)
 
   number_of_names = model.GetInputItemCount();
   fprintf (stdout, "Number of input names: %d\n", number_of_names);
-  model.GetInputVarNames(names);
+  names = model.GetInputVarNames();
   for (int i=0; i<number_of_names; i++)
     fprintf (stdout, "%s\n", names[i].c_str());
   fprintf (stdout, "\n");
 
   number_of_names = model.GetOutputItemCount();
   fprintf (stdout, "Number of output names: %d\n", number_of_names);
-  model.GetOutputVarNames(names);
+  names = model.GetOutputVarNames();
   for (int i=0; i<number_of_names; i++)
     fprintf (stdout, "%s\n", names[i].c_str());
   fprintf (stdout, "\n");

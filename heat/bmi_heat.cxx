@@ -353,19 +353,27 @@ GetOutputItemCount()
 }
 
 
-void BmiHeat::
-GetInputVarNames(std::vector<std::string> &names)
+std::vector<std::string> BmiHeat::
+GetInputVarNames()
 {
+  std::vector<std::string> names;
+
   for (int i=0; i<this->input_var_name_count; i++)
     names.push_back(this->input_var_names[i]);
+
+  return names;
 }
 
 
-void BmiHeat::
-GetOutputVarNames(std::vector<std::string> &names)
+std::vector<std::string> BmiHeat::
+GetOutputVarNames()
 {
+  std::vector<std::string> names;
+
   for (int i=0; i<this->input_var_name_count; i++)
     names.push_back(this->output_var_names[i]);
+
+  return names;
 }
 
 
