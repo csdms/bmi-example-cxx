@@ -1,9 +1,9 @@
-#include "bmi_heat.hxx"
-
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
+
+#include "bmi_heat.hxx"
 
 
 void print_var_info (BmiHeat model, std::string var);

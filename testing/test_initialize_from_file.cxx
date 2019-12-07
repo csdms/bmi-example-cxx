@@ -1,8 +1,9 @@
-#include <bmi_heat.hxx>
-
-#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
+#include <iostream>
+#include <vector>
+
+#include <bmi_heat.hxx>
 
 int
 main (void)
