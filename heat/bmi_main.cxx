@@ -3,6 +3,8 @@
 #include <iostream>
 #include <vector>
 
+#include "heat.hxx"
+#include <bmi.hxx>
 #include "bmi_heat.hxx"
 
 

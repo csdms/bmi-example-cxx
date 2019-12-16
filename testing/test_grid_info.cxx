@@ -3,7 +3,9 @@
 #include <stdlib.h>
 #include <vector>
 
-#include "bmi_heat.hxx"
+#include <heat.hxx>
+#include <bmi.hxx>
+#include <bmi_heat.hxx>
 
 
 void print_var_info (BmiHeat model, std::string var);
