@@ -34,6 +34,7 @@ This example can be built on Linux, macOS, and Windows.
 **Prerequisites:**
 * A C++ compiler
 * CMake
+* pkg-config
 * The C++ BMI bindings. Follow the build and install directions
   given in the
   [README](https://github.com/csdms/bmi-cxx/blob/master/README.md)
@@ -46,6 +47,7 @@ To build and install this example from source with cmake,
 using the current C++ BMI version, run
 
     mkdir _build && cd _build
+    export PKG_CONFIG_PATH=<path-to-installation>  # optional: only needed for non-standard install location
     cmake .. -DCMAKE_INSTALL_PREFIX=<path-to-installation>
     make
     make install
@@ -53,6 +55,8 @@ using the current C++ BMI version, run
 where `<path-to-installation>` is the base directory
 in which the C++ BMI bindings have been installed
 (`/usr/local` is the default).
+When installing into a conda environment,
+use the `CONDA_PREFIX` environment variable.
 
 The installation will look like
 (on macOS, using v2.0 of the BMI specification):
@@ -73,7 +77,8 @@ The installation will look like
 4 directories, 6 files
 ```
 
-Run tests on the sample implementation with
+From the build directory,
+run unit tests on the sample implementation with
 
     ctest
 
@@ -83,11 +88,12 @@ An additional prerequisite is needed for Windows:
 
 * Microsoft Visual Studio 2017 or Microsoft Build Tools for Visual Studio 2017
 
-To configure this example from source with cmake,
+To configure this example from source with cmake
 using the current C++ BMI version,
 run the following in a [Developer Command Prompt](https://docs.microsoft.com/en-us/dotnet/framework/tools/developer-command-prompt-for-vs)
 
     mkdir _build && cd _build
+    set "PKG_CONFIG_PATH=<path-to-installation>"  &:: optional: only needed for non-standard install location
     cmake .. ^
 	  -G "NMake Makefiles" ^
 	  -DCMAKE_INSTALL_PREFIX=<path-to-installation> ^
@@ -97,12 +103,15 @@ where `<path-to-installation>` is the base directory
 in which the C BMI bindings have been installed
 (`"C:\Program Files (x86)"` is the default;
 note that quotes and an absolute path are needed).
+When installing into a conda environment,
+use the `%CONDA_PREFIX%` environment variable.
 
 Then, to build and install:
 
 	cmake --build . --target install --config Release
 
-Run tests on the sample implementation with
+From the build directory,
+run unit tests on the sample implementation with
 
     ctest
 
