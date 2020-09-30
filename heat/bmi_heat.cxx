@@ -203,7 +203,10 @@ GetGridZ(const int grid, double *z)
 int BmiHeat::
 GetGridNodeCount(const int grid)
 {
-  throw NotImplemented();
+  if (grid == 0)
+    return this->_model.shape[0] * this->_model.shape[1];
+  else
+    return -1;
 }
 
 
