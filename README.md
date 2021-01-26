@@ -1,5 +1,5 @@
 [![Basic Model Interface](https://img.shields.io/badge/CSDMS-Basic%20Model%20Interface-green.svg)](https://bmi.readthedocs.io/)
-[![Build Status](https://travis-ci.org/csdms/bmi-example-cxx.svg?branch=master)](https://travis-ci.org/csdms/bmi-example-cxx)
+[![Build/Test CI](https://github.com/csdms/bmi-example-cxx/workflows/Build/Test%20CI/badge.svg)](https://github.com/csdms/bmi-example-cxx/actions?query=workflow%3A%22Build%2FTest+CI%22)
 
 # bmi-example-cxx
 
