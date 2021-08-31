@@ -112,7 +112,7 @@ _initialize_arrays(void)
   }
   for (i = 0; i < n_x; i++) {
     this->z[0][i] = 0.;
-    this->z[n_y-1][i] = top_x*top_x*.25 - (i-top_x*.5) * (i-top_x*.5);
+    this->z[n_y-1][i] = 0.;
   }
 
   memcpy (this->temp_z[0], this->z[0], sizeof (double)*n_x*n_y);
