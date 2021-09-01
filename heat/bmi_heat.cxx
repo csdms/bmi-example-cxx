@@ -90,7 +90,7 @@ std::string BmiHeat::
 GetVarUnits(std::string name)
 {
   if (name.compare("plate_surface__temperature") == 0)
-    return "meters";
+    return "K";
   else
     return "";
 }
