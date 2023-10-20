@@ -1,9 +1,14 @@
-name: Build/Test CI
+name: Build/Test
 
 on: [push, pull_request]
 
 jobs:
-  build-linux-and-macos:
+  build-and-test:
+
+    if:
+      github.event_name == 'push' || github.event.pull_request.head.repo.full_name !=
+      github.repository
+
     runs-on: ${{ matrix.os }}
 
     defaults:
@@ -12,85 +17,52 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
-        python-version: ["3.8"]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         build-type: [Release]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - uses: conda-incubator/setup-miniconda@v2
+      - uses: mamba-org/setup-micromamba@v1
         with:
-          auto-update-conda: true
-          python-version: ${{ matrix.python-version }}
-          channels: conda-forge
-          channel-priority: true
+          micromamba-version: latest
+          environment-name: testing
+          init-shell: >-
+            bash
+            powershell
+          create-args: >-
+            make
+            cmake
+            cxx-compiler
+            pkg-config
+            bmi-cxx
 
-      - name: Show conda installation info
-        run: conda info
-
-      - name: Install build tools and dependencies into env
-        run: |
-          conda install cxx-compiler cmake pkg-config bmi-cxx
-          conda list
-
-      - name: Make cmake build directory
+      - name: Make CMake build directory
         run: cmake -E make_directory build
 
-      - name: Configure cmake
+      - name: Configure CMake (Unix)
+        if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
         working-directory: ${{ github.workspace }}/build
-        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.build-type }}
+        run: |
+          cmake ${{ github.workspace }} \
+            -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} \
+            -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX
 
-      - name: Build
+      - name: Configure CMake (Windows)
+        if: matrix.os == 'windows-latest'
+        working-directory: ${{ github.workspace }}\build
+        shell: pwsh
+        run: |
+          & "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat" x86
+
+          cmake ${{ github.workspace }} `
+            -DCMAKE_INSTALL_PREFIX:PATH=$env:CONDA_PREFIX\Library `
+            -DCMAKE_BUILD_TYPE=${{ matrix.build-type }}
+
+      - name: Build and install
         working-directory: ${{ github.workspace }}/build
-        run: cmake --build . --config ${{ matrix.build-type }}
+        run: cmake --build . --target install --config ${{ matrix.build-type }}
 
       - name: Test
         working-directory: ${{ github.workspace }}/build
-        run: ctest -C ${{ matrix.build-type }} --output-on-failure
-
-  build-windows:
-    runs-on: windows-latest
-
-    env:
-      build-type: Release
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: conda-incubator/setup-miniconda@v2
-        with:
-          auto-update-conda: true
-          python-version: 3.8
-          channels: conda-forge
-          channel-priority: true
-
-      - name: Show conda installation info
-        run: conda info
-
-      - name: Install build tools and dependencies into env
-        run: |
-          conda install cxx-compiler cmake pkg-config bmi-cxx
-          conda list
-
-      - name: Make cmake build directory
-        run: cmake -E make_directory build
-
-      - name: Configure, build, and test
-        shell: cmd /C CALL {0}
-        working-directory: ${{ github.workspace }}\build
-        run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat" -vcvars_ver=14.16 10.0.19041.0
-
-          :: Configure
-          cmake ^
-            -LAH -G "NMake Makefiles" ^
-            -DPKG_CONFIG_EXECUTABLE:FILEPATH=C:/Miniconda/envs/test/Library/bin/pkg-config.exe ^
-            -DCMAKE_BUILD_TYPE=${{ env.build-type }} ^
-            ..
-
-          :: Build and install
-          cmake --build . --target install --config ${{ env.build-type }}
-
-          :: Test
-          ctest --output-on-failure -C ${{ env.build-type }} -V
+        run: ctest -C ${{ matrix.build-type }} --output-on-failure -VV
