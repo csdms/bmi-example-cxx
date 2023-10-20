@@ -6,7 +6,7 @@
 An example of implementing the
 [C++ bindings](https://github.com/csdms/bmi-cxx)
 for the CSDMS
-[Basic Model Interface](https://bmi-spec.readthedocs.io) (BMI).
+[Basic Model Interface](https://bmi.readthedocs.io) (BMI).
 
 
 ## Overview
