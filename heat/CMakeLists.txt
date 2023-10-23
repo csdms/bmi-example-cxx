@@ -1,33 +1,33 @@
-cmake_minimum_required(VERSION 3.0)
+# heatcxx
 
-set (HEAT_VERSION 0.2)
-configure_file (${CMAKE_CURRENT_SOURCE_DIR}/heatcxx.pc.cmake
-                ${CMAKE_BINARY_DIR}/heatcxx.pc)
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/${model_name}.pc.cmake
+  ${CMAKE_BINARY_DIR}/heat/${model_name}.pc
+)
 
-set(bmi_heat_lib_SRCS bmi_heat.cxx heat.cxx)
 if(WIN32)
-  add_library(bmiheatcxx ${bmi_heat_lib_SRCS})
+  add_library(${bmi_name} bmi_heat.cxx heat.cxx)
 else()
-  add_library(bmiheatcxx SHARED ${bmi_heat_lib_SRCS})
+  add_library(${bmi_name} SHARED bmi_heat.cxx heat.cxx)
 endif()
 
-add_executable(run_bmiheatcxx bmi_main.cxx bmi_heat.cxx heat.cxx)
+add_executable(run_${bmi_name} bmi_main.cxx bmi_heat.cxx heat.cxx)
 
 install(
-  TARGETS run_bmiheatcxx
-  RUNTIME DESTINATION bin
+  TARGETS run_${bmi_name}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 install(
-  TARGETS bmiheatcxx
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib
-  RUNTIME DESTINATION bin
+  TARGETS ${bmi_name}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 install(
   FILES bmi_heat.hxx heat.hxx
-  DESTINATION include
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 install(
-  FILES ${CMAKE_BINARY_DIR}/heatcxx.pc
-  DESTINATION lib/pkgconfig
+  FILES ${CMAKE_CURRENT_BINARY_DIR}/${model_name}.pc
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
 )
