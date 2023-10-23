@@ -1,7 +1,10 @@
 # bmi-example-cxx
 
 cmake_minimum_required(VERSION 3.12)
-project (bmi-example-cxx LANGUAGES CXX)
+project(bmi-example-cxx
+    VERSION 2.1
+    LANGUAGES CXX
+)
 
 include(GNUInstallDirs)
 

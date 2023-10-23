@@ -1,5 +1,5 @@
 Name: HeatCXX
 Description: 2D Heat Equation
-Version: ${HEAT_VERSION}
+Version: ${CMAKE_PROJECT_VERSION}
 Libs: -L${CMAKE_INSTALL_LIBDIR} -l${bmi_name}
 Cflags: -I${CMAKE_INSTALL_INCLUDEDIR}
