@@ -1,12 +1,12 @@
 [![Basic Model Interface](https://img.shields.io/badge/CSDMS-Basic%20Model%20Interface-green.svg)](https://bmi.readthedocs.io/)
-[![Build/Test CI](https://github.com/csdms/bmi-example-cxx/workflows/Build/Test%20CI/badge.svg)](https://github.com/csdms/bmi-example-cxx/actions?query=workflow%3A%22Build%2FTest+CI%22)
+[![Build/Test](https://github.com/csdms/bmi-example-cxx/actions/workflows/test.yml/badge.svg)](https://github.com/csdms/bmi-example-cxx/actions/workflows/test.yml)
 
 # bmi-example-cxx
 
 An example of implementing the
 [C++ bindings](https://github.com/csdms/bmi-cxx)
 for the CSDMS
-[Basic Model Interface](https://bmi-spec.readthedocs.io) (BMI).
+[Basic Model Interface](https://bmi.readthedocs.io) (BMI).
 
 
 ## Overview
@@ -56,7 +56,7 @@ where `<path-to-installation>` is the base directory
 in which the C++ BMI bindings have been installed
 (`/usr/local` is the default).
 When installing into a conda environment,
-use the `CONDA_PREFIX` environment variable.
+use the `$CONDA_PREFIX` environment variable.
 
 The installation will look like
 (on macOS, using v2.0 of the BMI specification):
@@ -100,11 +100,10 @@ run the following in a [Developer Command Prompt](https://docs.microsoft.com/en-
 	  -DCMAKE_BUILD_TYPE=Release
 
 where `<path-to-installation>` is the base directory
-in which the C BMI bindings have been installed
-(`"C:\Program Files (x86)"` is the default;
-note that quotes and an absolute path are needed).
-When installing into a conda environment,
-use the `%CONDA_PREFIX%` environment variable.
+in which the C++ BMI bindings have been installed.
+The default is `"C:\Program Files (x86)"`.
+Note that quotes and an absolute path are needed.
+When using a conda environment, use `"%CONDA_PREFIX%\Library"`.
 
 Then, to build and install:
 
