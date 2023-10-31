@@ -2,7 +2,7 @@
 
 cmake_minimum_required(VERSION 3.12)
 project(bmi-example-cxx
-    VERSION 2.1
+    VERSION 2.1.1
     LANGUAGES CXX
 )
 
