@@ -4,10 +4,16 @@ configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/${model_name}.pc.cmake
   ${CMAKE_BINARY_DIR}/heat/${model_name}.pc
 )
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/${bmi_name}.pc.cmake
+  ${CMAKE_BINARY_DIR}/heat/${bmi_name}.pc
+)
 
 if(WIN32)
+  add_library(${model_name} heat.cxx)
   add_library(${bmi_name} bmi_heat.cxx heat.cxx)
 else()
+  add_library(${model_name} SHARED heat.cxx)
   add_library(${bmi_name} SHARED bmi_heat.cxx heat.cxx)
 endif()
 
@@ -18,7 +24,7 @@ install(
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 install(
-  TARGETS ${bmi_name}
+  TARGETS ${model_name} ${bmi_name}
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -28,6 +34,8 @@ install(
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 install(
-  FILES ${CMAKE_CURRENT_BINARY_DIR}/${model_name}.pc
+  FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/${model_name}.pc
+    ${CMAKE_CURRENT_BINARY_DIR}/${bmi_name}.pc
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
 )
