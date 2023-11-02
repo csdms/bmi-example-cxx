@@ -67,14 +67,17 @@ The installation will look like
 |   `-- run_bmiheatcxx
 |-- include
 |   |-- bmi.hxx
+|   |-- heat.hxx
 |   `-- bmi_heat.hxx
 `-- lib
     |-- libbmiheatcxx.dylib
+    |-- libheatcxx.dylib
     `-- pkgconfig
         |-- bmicxx.pc
-        `-- heatcxx.pc
+        |-- heatcxx.pc
+        `-- bmiheatcxx.pc
 
-4 directories, 6 files
+4 directories, 9 files
 ```
 
 From the build directory,
