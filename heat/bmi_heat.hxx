@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
 
 #include <bmi.hxx>
 #include "heat.hxx"
