@@ -3,7 +3,7 @@
 #include <string>
 #include <cstring>
 #include <cstdlib>
-#include<vector>
+#include <vector>
 
 #include "heat.hxx"
 #include <bmi.hxx>
