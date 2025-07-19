@@ -19,6 +19,7 @@ endif()
 
 add_executable(run_${bmi_name} bmi_main.cxx)
 target_link_libraries(run_${bmi_name} ${bmi_name})
+target_include_directories(run_${bmi_name} PUBLIC ${BMICXX_INCLUDE_DIRS})
 
 install(
   TARGETS run_${bmi_name}
