@@ -17,7 +17,8 @@ else()
   add_library(${bmi_name} SHARED bmi_heat.cxx heat.cxx)
 endif()
 
-add_executable(run_${bmi_name} bmi_main.cxx bmi_heat.cxx heat.cxx)
+add_executable(run_${bmi_name} bmi_main.cxx)
+target_link_libraries(run_${bmi_name} ${bmi_name})
 
 install(
   TARGETS run_${bmi_name}
