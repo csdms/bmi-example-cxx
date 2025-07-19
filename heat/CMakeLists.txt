@@ -16,10 +16,10 @@ else()
   add_library(${model_name} SHARED heat.cxx)
   add_library(${bmi_name} SHARED bmi_heat.cxx heat.cxx)
 endif()
+target_include_directories(${bmi_name} PUBLIC ${BMICXX_INCLUDE_DIRS})
 
 add_executable(run_${bmi_name} bmi_main.cxx)
 target_link_libraries(run_${bmi_name} ${bmi_name})
-target_include_directories(run_${bmi_name} PUBLIC ${BMICXX_INCLUDE_DIRS})
 
 install(
   TARGETS run_${bmi_name}
