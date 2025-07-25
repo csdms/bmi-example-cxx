@@ -9,6 +9,8 @@ configure_file(
   ${CMAKE_BINARY_DIR}/heat/${bmi_name}.pc
 )
 
+SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
 if(WIN32)
   add_library(${model_name} heat.cxx)
   add_library(${bmi_name} bmi_heat.cxx heat.cxx)
@@ -20,7 +22,7 @@ target_include_directories(${bmi_name} PUBLIC ${BMICXX_INCLUDE_DIRS})
 
 add_executable(run_${bmi_name} bmi_main.cxx)
 target_link_libraries(run_${bmi_name} ${bmi_name})
-set_target_properties(run_${bmi_name} PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
+# set_target_properties(run_${bmi_name} PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 install(
   TARGETS run_${bmi_name}
