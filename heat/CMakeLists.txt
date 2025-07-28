@@ -9,7 +9,7 @@ configure_file(
   ${CMAKE_BINARY_DIR}/heat/${bmi_name}.pc
 )
 
-SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+# SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 if(WIN32)
   add_library(${model_name} heat.cxx)
