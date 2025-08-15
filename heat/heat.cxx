@@ -73,6 +73,7 @@ Heat(std::string config_file)
   this->alpha = alpha;
   this->dt = 1. / (4. * alpha);
   this->t_end = t_end;
+  this->time = 0.;
   this->shape[0] = n_y;
   this->shape[1] = n_x;
   this->spacing[0] = 1.;
