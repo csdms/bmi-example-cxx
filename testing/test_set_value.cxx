@@ -57,8 +57,8 @@ main (void)
   print_matrix (new_vals, rank, shape);
 
 
-  delete shape;
-  delete new_vals;
+  delete[] shape;
+  delete[] new_vals;
 
   model.Finalize ();
 

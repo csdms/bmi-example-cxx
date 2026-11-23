@@ -1,6 +1,8 @@
 #ifndef HEAT_INCLUDED
 #define HEAT_INCLUDED
 
+#include <string>
+
 namespace heat {
   class Heat {
     private:
@@ -8,7 +10,9 @@ namespace heat {
 
       double **temp_z;
 
+      void _allocate_arrays();
       void _initialize_arrays(void);
+      void _copy_metadata(const Heat &other);
 
     public:
       int shape[2];
@@ -21,7 +25,10 @@ namespace heat {
 
       Heat();
       Heat(std::string config_file);
+      Heat(const Heat &other);
+      Heat &operator=(Heat other);
       ~Heat();
+      void finalize();
       void advance_in_time ();
   };
 };

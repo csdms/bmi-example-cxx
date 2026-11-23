@@ -15,6 +15,8 @@ Initialize (std::string config_file)
 {
   if (config_file.compare("") != 0 )
     this->_model = heat::Heat(config_file);
+  else if (this->_model.z == NULL)
+    this->_model = heat::Heat();
 }
 
 
@@ -52,7 +54,7 @@ UpdateUntil(double t)
 void BmiHeat::
 Finalize()
 {
-  this->_model.~Heat();
+  this->_model.finalize();
 }
 
 

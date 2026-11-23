@@ -56,7 +56,7 @@ advance_in_time ()
 
 
 heat::Heat::
-Heat(std::string config_file)
+Heat(std::string config_file) : temp_z(NULL), z(NULL)
 {
   FILE * fp;
   double alpha = 1.;
@@ -86,6 +86,31 @@ Heat(std::string config_file)
 
 
 void heat::Heat::
+_allocate_arrays()
+{
+  const int n_y = this->shape[0];
+  const int n_x = this->shape[1];
+  const int len = n_x * n_y;
+
+  try {
+    this->z = new double*[n_y]();
+    this->temp_z = new double*[n_y]();
+    this->z[0] = new double[len];
+    this->temp_z[0] = new double[len];
+  } catch (...) {
+    this->finalize();
+    throw;
+  }
+
+  // The row pointers index two contiguous grids
+  for (int i = 1; i < n_y; i++) {
+    this->z[i] = this->z[i-1] + n_x;
+    this->temp_z[i] = this->temp_z[i-1] + n_x;
+  }
+}
+
+
+void heat::Heat::
 _initialize_arrays(void)
 {
   int i;
@@ -94,16 +119,7 @@ _initialize_arrays(void)
   const int len = n_x * n_y;
   double top_x = n_x - 1;
 
-  /* Allocate memory */
-  this->temp_z = new double*[n_y];
-  this->z = new double*[n_y];
-
-  this->z[0] = new double[n_x * n_y];
-  this->temp_z[0] = new double[n_x*n_y];
-  for (i=1; i<n_y; i++) {
-    this->z[i] = this->z[i-1] + n_x;
-    this->temp_z[i] = this->temp_z[i-1] + n_x;
-  }
+  this->_allocate_arrays();
 
   for (i = 0; i < len; i++)
     this->z[0][i] = rand ()*1./RAND_MAX * top_x*top_x*.5 - top_x*top_x*.25;
@@ -121,7 +137,7 @@ _initialize_arrays(void)
 
 
 heat::Heat::
-Heat()
+Heat() : temp_z(NULL), z(NULL)
 {
   this->alpha = 1.;
   this->t_end = 10.;
@@ -139,7 +155,64 @@ Heat()
 
 
 heat::Heat::
+Heat(const Heat &other) : temp_z(NULL), z(NULL)
+{
+  this->_copy_metadata(other);
+  if (other.z != NULL) {
+    this->_allocate_arrays();
+    const size_t n_bytes = sizeof (double) * this->shape[0] * this->shape[1];
+    memcpy (this->z[0], other.z[0], n_bytes);
+    memcpy (this->temp_z[0], other.temp_z[0], n_bytes);
+  }
+}
+
+
+heat::Heat &heat::Heat::
+operator=(Heat other)
+{
+  // The replacement already owns its grids before the old grids are released
+  this->finalize();
+  this->_copy_metadata(other);
+  this->z = other.z;
+  this->temp_z = other.temp_z;
+  other.z = NULL;
+  other.temp_z = NULL;
+  return *this;
+}
+
+
+void heat::Heat::
+_copy_metadata(const Heat &other)
+{
+  this->alpha = other.alpha;
+  this->time = other.time;
+  this->t_end = other.t_end;
+  this->dt = other.dt;
+  memcpy (this->shape, other.shape, sizeof this->shape);
+  memcpy (this->spacing, other.spacing, sizeof this->spacing);
+  memcpy (this->origin, other.origin, sizeof this->origin);
+}
+
+
+heat::Heat::
 ~Heat()
 {
+  this->finalize();
+}
+
+
+void heat::Heat::
+finalize()
+{
+  if (this->z != NULL) {
+    delete[] this->z[0];
+    delete[] this->z;
+    this->z = NULL;
+  }
+  if (this->temp_z != NULL) {
+    delete[] this->temp_z[0];
+    delete[] this->temp_z;
+    this->temp_z = NULL;
+  }
   this->time = 0.;
 }
