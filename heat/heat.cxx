@@ -1,4 +1,5 @@
 #include <string>
+#include <stdexcept>
 #include <cstring>
 #include <stdlib.h>
 #include <stdio.h>
@@ -65,6 +66,8 @@ Heat(std::string config_file) : temp_z(NULL), z(NULL)
   int n_y = 0;
 
   fp = fopen (config_file.c_str (), "r");
+  if (fp == NULL)
+    throw std::runtime_error("Could not open configuration file: " + config_file);
 
   fscanf (fp, "%lf, %lf, %d, %d", &alpha, &t_end, &n_x, &n_y);
 
