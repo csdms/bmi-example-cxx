@@ -85,7 +85,7 @@ print_var_info(BmiHeat model, std::string var)
   fprintf (stdout, "Resolution: %f x %f\n", spacing[0], spacing[1]);
   fprintf (stdout, "Corner: (%f, %f)\n", origin[0], origin[1]);
 
-  delete origin;
-  delete spacing;
-  delete shape;
+  delete[] origin;
+  delete[] spacing;
+  delete[] shape;
 }

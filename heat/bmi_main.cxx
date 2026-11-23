@@ -68,6 +68,7 @@ int main(int argc, char *argv[])
 
       model.Update();
     }
+    delete[] shape;
   }
   
   fprintf(fp, "Finalizing... ");

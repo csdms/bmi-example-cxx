@@ -73,11 +73,11 @@ print_var_column(BmiHeat model, const char *name, int colno)
       fprintf (stdout, "%f ", col[i]);
     fprintf (stdout, "\n");
 
-    free(col);
+    delete[] col;
     free(inds);
   }
 
-  delete shape;
+  delete[] shape;
 
   return;
 }
@@ -116,7 +116,8 @@ print_var_values(BmiHeat model, const char *var_name)
   print_var_column(model, var_name, 1);
   print_var_column(model, var_name, shape[1] - 2);
 
-  delete shape;
+  delete[] var;
+  delete[] shape;
 
   return;
 }
