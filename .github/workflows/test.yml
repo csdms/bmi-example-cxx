@@ -6,8 +6,7 @@ jobs:
   build-and-test:
 
     if:
-      github.event_name == 'push' || github.event.pull_request.head.repo.full_name !=
-      github.repository
+      github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
 
     runs-on: ${{ matrix.os }}
 
@@ -21,9 +20,9 @@ jobs:
         build-type: [Release]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: mamba-org/setup-micromamba@v1
+      - uses: mamba-org/setup-micromamba@v3
         with:
           micromamba-version: latest
           environment-name: testing
