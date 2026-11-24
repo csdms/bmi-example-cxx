@@ -2,6 +2,9 @@ name: Build/Test
 
 on: [push, pull_request]
 
+env:
+  BUILD_DIR: _build
+
 jobs:
 
   build-and-test-unix:
@@ -36,24 +39,17 @@ jobs:
             pkg-config
             bmi-cxx
 
-      - name: Make CMake build directory
-        run: cmake -E make_directory build
-
-      - name: Configure CMake (Unix)
-        if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
-        working-directory: ${{ github.workspace }}/build
+      - name: Configure project
         run: |
-          cmake ${{ github.workspace }} \
+          cmake $GITHUB_WORKSPACE -B ${{ env.BUILD_DIR }} \
             -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} \
             -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX
 
-      - name: Build and install
-        working-directory: ${{ github.workspace }}/build
-        run: cmake --build . --target install --config ${{ matrix.build-type }}
+      - name: Build and install project
+        run: cmake --build ${{ env.BUILD_DIR }} --target install --config ${{ matrix.build-type }}
 
-      - name: Test
-        working-directory: ${{ github.workspace }}/build
-        run: ctest -C ${{ matrix.build-type }} --output-on-failure -VV
+      - name: Run project tests
+        run: ctest --test-dir ${{ env.BUILD_DIR }} -C ${{ matrix.build-type }} --output-on-failure -VV
 
   build-and-test-windows:
 
