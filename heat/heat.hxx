@@ -2,17 +2,16 @@
 #define HEAT_INCLUDED
 
 #include <string>
+#include <vector>
 
 namespace heat {
   class Heat {
     private:
       double alpha;
 
-      double **temp_z;
+      std::vector<double> temp_z;
 
-      void _allocate_arrays();
       void _initialize_arrays(void);
-      void _copy_metadata(const Heat &other);
 
     public:
       int shape[2];
@@ -21,13 +20,11 @@ namespace heat {
       double time;
       double t_end;
       double dt;
-      double **z;
+      // Row-major temperatures with shape[1] columns
+      std::vector<double> z;
 
       Heat();
       Heat(std::string config_file);
-      Heat(const Heat &other);
-      Heat &operator=(Heat other);
-      ~Heat();
       void finalize();
       void advance_in_time ();
   };

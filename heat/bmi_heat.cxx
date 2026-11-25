@@ -15,7 +15,7 @@ Initialize (std::string config_file)
 {
   if (config_file.compare("") != 0 )
     this->_model = heat::Heat(config_file);
-  else if (this->_model.z == NULL)
+  else if (this->_model.z.empty())
     this->_model = heat::Heat();
 }
 
@@ -271,7 +271,7 @@ void *BmiHeat::
 GetValuePtr (std::string name)
 {
   if (name.compare("plate_surface__temperature") == 0)
-    return (void*)this->_model.z[0];
+    return this->_model.z.data();
   else
     return NULL;
 }
