@@ -16,8 +16,6 @@ main (void)
   int i;
   const int n_steps = 10;
   BmiHeat model;
-  double *new_vals = NULL;
-  int *shape = NULL;
   int size;
   std::string name;
   int rank;
@@ -31,34 +29,31 @@ main (void)
   grid = model.GetVarGrid("plate_surface__temperature");
   rank = model.GetGridRank(grid);
 
-  shape = new int[rank];
-  model.GetGridShape(grid, shape);
+  std::vector<int> shape(rank);
+  model.GetGridShape(grid, shape.data());
 
-  new_vals = (double *)model.GetValuePtr("plate_surface__temperature");
+  double *model_vals =
+      static_cast<double *>(model.GetValuePtr("plate_surface__temperature"));
 
   fprintf (stdout, "Values before set\n");
   fprintf (stdout, "=================\n");
-  print_matrix (new_vals, rank, shape);
+  print_matrix (model_vals, rank, shape.data());
 
-  new_vals[0] = -1;
+  model_vals[0] = -1;
 
   size = model.GetGridSize(grid);
-  new_vals = new double[size];
+  std::vector<double> new_vals(size);
 
-  model.GetValue("plate_surface__temperature", new_vals);
-  print_matrix (new_vals, rank, shape);
+  model.GetValue("plate_surface__temperature", new_vals.data());
+  print_matrix (new_vals.data(), rank, shape.data());
 
   new_vals[0] = 1.;
 
-  model.SetValue("plate_surface__temperature", new_vals);
+  model.SetValue("plate_surface__temperature", new_vals.data());
 
   fprintf (stdout, "Values after set\n");
   fprintf (stdout, "================\n");
-  print_matrix (new_vals, rank, shape);
-
-
-  delete shape;
-  delete new_vals;
+  print_matrix (new_vals.data(), rank, shape.data());
 
   model.Finalize ();
 

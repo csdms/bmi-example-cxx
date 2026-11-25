@@ -1,57 +1,32 @@
+#include <algorithm>
 #include <string>
-#include <cstring>
+#include <stdexcept>
 #include <stdlib.h>
 #include <stdio.h>
 #include "heat.hxx"
 
 
-#define OK (1)
-
-
-int
-heat_solve_2d (double ** z, int shape[2], double spacing[2], double alpha,
-    double dt, double ** out)
-{
-  {
-    int i, j;
-    const int top_row = shape[0] - 1;
-    const int top_col = shape[1] - 1;
-    const double dx2 = spacing[1] * spacing[1];
-    const double dy2 = spacing[0] * spacing[0];
-    const double c = alpha * dt / (dx2 + dy2);
-
-    for (i=1; i<top_row; i++)
-      for (j=1; j<top_col; j++) {
-        out[i][j] = c * (dx2 * (z[i][j - 1] + z[i][j + 1]) +
-                         dy2 * (z[i - 1][j] + z[i + 1][j]) -
-                         2. * (dx2 + dy2) * z[i][j]);
-      }
-
-    for (j=0; j<shape[1]; j++) {
-        out[0][j] = 0.;
-        out[top_row][j] = 0.;
-    }
-    for (i=0; i<shape[0]; i++) {
-        out[i][0] = 0.;
-        out[i][top_col] = 0.;
-    }
-
-    for (i=1; i<top_row; i++)
-      for (j=1; j<top_col; j++)
-        out[i][j] += z[i][j];
-  }
-
-  return OK;
-}
-
 void heat::Heat::
 advance_in_time ()
 {
-  const int n_elements = this->shape[0] * this->shape[1];
-  heat_solve_2d (this->z, this->shape, this->spacing, this->alpha, this->dt,
-      this->temp_z);
+  const int n_y = this->shape[0];
+  const int n_x = this->shape[1];
+  const double dx2 = this->spacing[1] * this->spacing[1];
+  const double dy2 = this->spacing[0] * this->spacing[0];
+  const double rx = this->alpha * this->dt / dx2;
+  const double ry = this->alpha * this->dt / dy2;
+
+  for (int i = 1; i < n_y - 1; i++) {
+    for (int j = 1; j < n_x - 1; j++) {
+      const int k = i * n_x + j;
+      temp_z[k] = z[k] + rx * (z[k - 1] - 2. * z[k] + z[k + 1])
+                       + ry * (z[k - n_x] - 2. * z[k] + z[k + n_x]);
+    }
+  }
+
+  // Copy rather than std::swap, so that GetValuePtr() retains correct memory location
+  std::copy(temp_z.begin(), temp_z.end(), z.begin());
   this->time += this->dt;
-  memcpy (this->z[0], this->temp_z[0], sizeof (double) * n_elements);
 }
 
 
@@ -65,6 +40,8 @@ Heat(std::string config_file)
   int n_y = 0;
 
   fp = fopen (config_file.c_str (), "r");
+  if (fp == NULL)
+    throw std::runtime_error("Could not open configuration file: " + config_file);
 
   fscanf (fp, "%lf, %lf, %d, %d", &alpha, &t_end, &n_x, &n_y);
 
@@ -88,35 +65,24 @@ Heat(std::string config_file)
 void heat::Heat::
 _initialize_arrays(void)
 {
-  int i;
   const int n_y = this->shape[0];
   const int n_x = this->shape[1];
-  const int len = n_x * n_y;
-  double top_x = n_x - 1;
+  const double top_x = n_x - 1;
 
-  /* Allocate memory */
-  this->temp_z = new double*[n_y];
-  this->z = new double*[n_y];
+  const int n_cells = n_y * n_x;
+  z.resize(n_cells);
+  temp_z.resize(z.size(), 0.);
 
-  this->z[0] = new double[n_x * n_y];
-  this->temp_z[0] = new double[n_x*n_y];
-  for (i=1; i<n_y; i++) {
-    this->z[i] = this->z[i-1] + n_x;
-    this->temp_z[i] = this->temp_z[i-1] + n_x;
+  for (int k = 0; k < n_cells; k++)
+    z[k] = rand() * 1. / RAND_MAX * top_x * top_x * .5 - top_x * top_x * .25;
+
+  for (int i = 0; i < n_y; i++) {
+    const int row = i * n_x;
+    z[row] = 0.;
+    z[row + n_x - 1] = 0.;
   }
-
-  for (i = 0; i < len; i++)
-    this->z[0][i] = rand ()*1./RAND_MAX * top_x*top_x*.5 - top_x*top_x*.25;
-  for (i = 0; i < n_y; i++) {
-    this->z[i][0] = 0.;
-    this->z[i][n_x-1] = 0.;
-  }
-  for (i = 0; i < n_x; i++) {
-    this->z[0][i] = 0.;
-    this->z[n_y-1][i] = 0.;
-  }
-
-  memcpy (this->temp_z[0], this->z[0], sizeof (double)*n_x*n_y);
+  std::fill_n(z.begin(), n_x, 0.);
+  std::fill_n(z.end() - n_x, n_x, 0.);
 }
 
 
@@ -138,8 +104,11 @@ Heat()
 }
 
 
-heat::Heat::
-~Heat()
+void heat::Heat::
+finalize()
 {
+  // Explicitly release memory for the solution/work arrays
+  std::vector<double>().swap(z);
+  std::vector<double>().swap(temp_z);
   this->time = 0.;
 }

@@ -48,36 +48,29 @@ void
 print_var_column(BmiHeat model, const char *name, int colno)
 {
   int grid;
-  int * shape;
   int rank;
 
   grid = model.GetVarGrid(name);
   rank = model.GetGridRank(grid);
 
-  shape = new int[rank];
-  model.GetGridShape(grid, shape);
+  std::vector<int> shape(rank);
+  model.GetGridShape(grid, shape.data());
 
   {
-    int * inds = (int*)malloc(sizeof(int)*shape[0]);
-    double * col = NULL;
+    std::vector<int> inds(shape[0]);
 
     inds[0] = colno;
     for (int i=1; i<shape[0]; i++)
       inds[i] = inds[i-1] + shape[1];
 
-    col = new double[shape[0]];
-    model.GetValueAtIndices(name, col, inds, shape[0]);
+    std::vector<double> col(shape[0]);
+    model.GetValueAtIndices(name, col.data(), inds.data(), shape[0]);
 
     fprintf (stdout, "Column %d: ", colno);
     for (int i=0; i<shape[0]; i++)
       fprintf (stdout, "%f ", col[i]);
     fprintf (stdout, "\n");
-
-    free(col);
-    free(inds);
   }
-
-  delete shape;
 
   return;
 }
@@ -85,10 +78,8 @@ print_var_column(BmiHeat model, const char *name, int colno)
 void
 print_var_values(BmiHeat model, const char *var_name)
 {
-  double *var = NULL;
   int i, j;
   int grid;
-  int * shape;
   int rank;
   int size;
 
@@ -96,11 +87,11 @@ print_var_values(BmiHeat model, const char *var_name)
   rank = model.GetGridRank(grid);
   size = model.GetGridSize(grid);
 
-  shape = new int[rank];
-  model.GetGridShape(grid, shape);
+  std::vector<int> shape(rank);
+  model.GetGridShape(grid, shape.data());
 
-  var = new double[size];
-  model.GetValue(var_name, var);
+  std::vector<double> var(size);
+  model.GetValue(var_name, var.data());
 
   fprintf (stdout, "Variable: %s\n", var_name);
   fprintf (stdout, "Number of dimension: %d\n", rank);
@@ -115,8 +106,6 @@ print_var_values(BmiHeat model, const char *var_name)
 
   print_var_column(model, var_name, 1);
   print_var_column(model, var_name, shape[1] - 2);
-
-  delete shape;
 
   return;
 }

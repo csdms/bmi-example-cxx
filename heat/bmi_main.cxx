@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 
   {
     std::string var_name = "plate_surface__temperature";
-    int grid, rank, *shape;
+    int grid, rank;
     double *var = NULL;
     double time = 0.0;
     double end_time;
@@ -45,8 +45,8 @@ int main(int argc, char *argv[])
 
     rank = model.GetGridRank(grid);
     fprintf(fp, "rank = %d\n", rank);
-    shape = new int[rank];
-    model.GetGridShape(grid, shape);
+    std::vector<int> shape(rank);
+    model.GetGridShape(grid, shape.data());
     fprintf(fp, "shape = %d x %d\n", shape[0], shape[1]);
 
     var = (double *)model.GetValuePtr(var_name);

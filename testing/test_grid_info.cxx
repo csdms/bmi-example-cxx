@@ -44,9 +44,6 @@ main (void)
 void
 print_var_info(BmiHeat model, std::string var)
 {
-  int *shape;
-  double *spacing;
-  double *origin;
   int grid;
   std::string type;
   std::string units;
@@ -63,13 +60,13 @@ print_var_info(BmiHeat model, std::string var)
   size = model.GetGridSize(grid);
   grid_type = model.GetGridType(grid);
 
-  shape = new int[rank];
-  spacing = new double[rank];
-  origin = new double[rank];
+  std::vector<int> shape(rank);
+  std::vector<double> spacing(rank);
+  std::vector<double> origin(rank);
 
-  model.GetGridShape(grid, shape);
-  model.GetGridSpacing(grid, spacing);
-  model.GetGridOrigin(grid, origin);
+  model.GetGridShape(grid, shape.data());
+  model.GetGridSpacing(grid, spacing.data());
+  model.GetGridOrigin(grid, origin.data());
 
   fprintf (stdout, "\n");
   fprintf (stdout, "Variable info\n");
@@ -84,8 +81,4 @@ print_var_info(BmiHeat model, std::string var)
   fprintf (stdout, "Dimension: %d x %d\n", shape[0], shape[1]);
   fprintf (stdout, "Resolution: %f x %f\n", spacing[0], spacing[1]);
   fprintf (stdout, "Corner: (%f, %f)\n", origin[0], origin[1]);
-
-  delete origin;
-  delete spacing;
-  delete shape;
 }
