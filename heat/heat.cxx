@@ -14,16 +14,15 @@ advance_in_time ()
   const int n_x = this->shape[1];
   const double dx2 = this->spacing[1] * this->spacing[1];
   const double dy2 = this->spacing[0] * this->spacing[0];
-  const double c = this->alpha * this->dt / (dx2 + dy2);
+  const double rx = this->alpha * this->dt / dx2;
+  const double ry = this->alpha * this->dt / dy2;
 
   // Update the interior of the work grid and keep its boundaries at zero
   for (int i = 1; i < n_y - 1; i++) {
     for (int j = 1; j < n_x - 1; j++) {
       const std::size_t k = static_cast<std::size_t>(i) * n_x + j;
-      temp_z[k] = c * (dx2 * (z[k - 1] + z[k + 1]) +
-                       dy2 * (z[k - n_x] + z[k + n_x]) -
-                       2. * (dx2 + dy2) * z[k]);
-      temp_z[k] += z[k];
+      temp_z[k] = z[k] + rx * (z[k - 1] - 2. * z[k] + z[k + 1])
+                       + ry * (z[k - n_x] - 2. * z[k] + z[k + n_x]);
     }
   }
 
